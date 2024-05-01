@@ -19,7 +19,7 @@
 
   <groupId>eu.maveniverse.maven.mdk</groupId>
   <artifactId>mdk</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1.9</version>
   <packaging>pom</packaging>
 
   <name>${project.groupId}:${project.artifactId}</name>
