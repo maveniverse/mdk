@@ -22,43 +22,28 @@
   <name>${project.groupId}:${project.artifactId}</name>
 
   <dependencies>
-    <!-- MIMA + Logging -->
+    <dependency>
+      <groupId>eu.maveniverse.maven.mdk</groupId>
+      <artifactId>api</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+      <version>1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.sisu</groupId>
+      <artifactId>org.eclipse.sisu.inject</artifactId>
+      <version>0.9.0.M2</version>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>eu.maveniverse.maven.mima</groupId>
-      <artifactId>context</artifactId>
-    </dependency>
-
-    <!-- Maven -->
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-api</artifactId>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-core</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-settings</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-repository-metadata</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-utils</artifactId>
-    </dependency>
-
-    <!-- Resolver -->
     <dependency>
       <groupId>org.apache.maven.resolver</groupId>
       <artifactId>maven-resolver-api</artifactId>
@@ -69,45 +54,23 @@
       <artifactId>maven-resolver-util</artifactId>
       <scope>provided</scope>
     </dependency>
-
-    <!-- Search -->
     <dependency>
-      <groupId>org.apache.maven.indexer</groupId>
-      <artifactId>search-api</artifactId>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.apache.maven.indexer</groupId>
-      <artifactId>search-backend-remoterepository</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.indexer</groupId>
-      <artifactId>search-backend-smo</artifactId>
-    </dependency>
-
-    <!-- Commons Compress (unpack) -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>eu.maveniverse.maven.mima.runtime</groupId>
-      <artifactId>standalone-static-uber</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

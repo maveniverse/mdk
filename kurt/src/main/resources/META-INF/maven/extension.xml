@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension>
+    <exportedPackages>
+        <exportedPackage>org.apache.maven.plugins.deploy.spi</exportedPackage>
+        <exportedPackage>eu.maveniverse.maven.mdk.kurt</exportedPackage>
+    </exportedPackages>
+
+    <exportedArtifacts>
+        <exportedArtifact>eu.maveniverse.maven.mdk:api</exportedArtifact>
+        <exportedArtifact>eu.maveniverse.maven.mdk:kurt</exportedArtifact>
+    </exportedArtifacts>
+</extension>
