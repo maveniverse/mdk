@@ -30,7 +30,7 @@ public class FullReleaseDeployerFactory implements DeployerFactory {
     public Deployer createDeployer(MavenSession session) {
         LocalStagingDeployer localStagingDeployer = localStagingDeployerFactory.createDeployer(session);
         return new FullReleaseDeployer(
-                localStagingDeployerFactory.createDeployer(session),
+                localStagingDeployer,
                 contextFactory.createContext(session, localStagingDeployer.getLocalStagingDirectory()));
     }
 }
