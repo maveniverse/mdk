@@ -56,15 +56,11 @@ public interface Deployer extends Closeable {
 
     /**
      * This method is called whenever Maven Deploy Plugin wants to deploy (have on mind it can "deploy at end"). The
-     * implementation have several choices:
-     * <ul>
-     *     <li>return {@code true}: it means the component processed this call, so "all done".</li>
-     *     <li>return {@code false}: it means the component did not process this call, so Kurt will collect and batch-up
-     *     this request and this request will be passed in {@link #processAll(MavenSession, Map)} at session end.</li>
-     *     <li>throw {@link DeploymentException} if request is not to be processed by implementation for whatever
-     *     reason (ie. it accepts only RELEASE artifacts but deploy request carries SNAPSHOT artifacts)/ This
-     *     will render deploy attempt fail.</li>
-     * </ul>
+     * implementation have several choices: it can process the request and return {@link RequestStatus#PROCESSED},
+     * it can inspect the request and return {@link RequestStatus#DELAYED} to have it delivered "batched" into
+     * {@link #processAll(MavenSession, Map)} method, or it can simply refuse by returning {@link RequestStatus#REFUSED}
+     * for any reason (for example it handles only RELEASE artifacts and request carries SNAPSHOT ones). Finally, it
+     * can throw as well, that will make deployment (and whole build) fail.
      */
     RequestStatus processRequest(MavenSession mavenSession, DeployRequest deployRequest)
             throws DeploymentException, IOException;

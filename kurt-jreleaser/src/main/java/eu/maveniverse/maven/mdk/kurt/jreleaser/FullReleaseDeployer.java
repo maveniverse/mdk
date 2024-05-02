@@ -15,7 +15,8 @@ import org.jreleaser.workflow.Workflows;
 
 /**
  * A JReleaser deployer, that does not accept SNAPSHOT artifacts. It uses "full-release" workflow
- * of JReleaser.
+ * of JReleaser. Reuses {@link LocalStagingDeployer} delegates all local staging thing to it,
+ * and then takes over.
  */
 public class FullReleaseDeployer extends DeployerSupport {
     private final LocalStagingDeployer localStagingDeployer;
