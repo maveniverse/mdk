@@ -2,7 +2,6 @@ package eu.maveniverse.maven.mdk.kurt.deployers;
 
 import static java.util.Objects.requireNonNull;
 
-import eu.maveniverse.maven.mdk.kurt.Deployer;
 import eu.maveniverse.maven.mdk.kurt.DeployerFactory;
 import eu.maveniverse.maven.mdk.kurt.KurtConfig;
 import java.nio.file.Path;
@@ -26,7 +25,7 @@ public class LocalStagingDeployerFactory implements DeployerFactory {
     }
 
     @Override
-    public Deployer createDeployer(MavenSession session) {
+    public LocalStagingDeployer createDeployer(MavenSession session) {
         Path target = Paths.get(session.getTopLevelProject().getBuild().getDirectory());
         Path staging = target.resolve(KurtConfig.LOCAL_STAGING_DIRECTORY.require(session));
         return new LocalStagingDeployer(repositorySystem, staging);

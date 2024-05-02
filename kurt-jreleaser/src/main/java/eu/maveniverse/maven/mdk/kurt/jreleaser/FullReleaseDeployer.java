@@ -3,9 +3,10 @@ package eu.maveniverse.maven.mdk.kurt.jreleaser;
 import static java.util.Objects.requireNonNull;
 
 import eu.maveniverse.maven.mdk.kurt.deployers.DeployerSupport;
+import eu.maveniverse.maven.mdk.kurt.deployers.LocalStagingDeployer;
+import java.nio.file.Path;
 import java.util.Map;
 import org.apache.maven.execution.MavenSession;
-import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.deployment.DeployRequest;
 import org.eclipse.aether.deployment.DeploymentException;
 import org.eclipse.aether.repository.RemoteRepository;
@@ -17,24 +18,26 @@ import org.jreleaser.workflow.Workflows;
  * of JReleaser.
  */
 public class FullReleaseDeployer extends DeployerSupport {
+    private final LocalStagingDeployer localStagingDeployer;
     private final JReleaserContext context;
 
-    public FullReleaseDeployer(JReleaserContext context) {
+    public FullReleaseDeployer(LocalStagingDeployer localStagingDeployer, JReleaserContext context) {
         super(FullReleaseDeployerFactory.NAME);
+        this.localStagingDeployer = requireNonNull(localStagingDeployer);
         this.context = requireNonNull(context);
     }
 
     @Override
     public RequestStatus processRequest(MavenSession mavenSession, DeployRequest deployRequest) {
-        if (deployRequest.getArtifacts().stream().anyMatch(Artifact::isSnapshot)) {
-            return RequestStatus.REFUSED;
-        }
-        return RequestStatus.DELAYED;
+        return localStagingDeployer.processRequest(mavenSession, deployRequest);
     }
 
     @Override
     public void processAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
             throws DeploymentException {
+        localStagingDeployer.processAll(session, deployRequests);
+        Path localStagingDirectory = localStagingDeployer.getLocalStagingDirectory();
+        // TBD: let JReleaser take over from here
         Workflows.fullRelease(context).execute();
     }
 }

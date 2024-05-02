@@ -1,9 +1,11 @@
 package eu.maveniverse.maven.mdk.kurt.jreleaser;
 
+import static java.util.Objects.requireNonNull;
 import static org.jreleaser.util.FileUtils.resolveOutputDirectory;
 
 import eu.maveniverse.maven.mdk.kurt.Deployer;
 import eu.maveniverse.maven.mdk.kurt.DeployerFactory;
+import eu.maveniverse.maven.mdk.kurt.deployers.LocalStagingDeployerFactory;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,6 +29,7 @@ import org.jreleaser.util.StringUtils;
 public class FullReleaseDeployerFactory implements DeployerFactory {
     public static final String NAME = "jreleaser-full-release";
 
+    private final LocalStagingDeployerFactory localStagingDeployerFactory;
     protected File basedir;
     protected File configFile;
     protected Boolean dryRun;
@@ -38,7 +41,9 @@ public class FullReleaseDeployerFactory implements DeployerFactory {
     protected Path actualBasedir;
 
     @Inject
-    public FullReleaseDeployerFactory() {}
+    public FullReleaseDeployerFactory(LocalStagingDeployerFactory localStagingDeployerFactory) {
+        this.localStagingDeployerFactory = requireNonNull(localStagingDeployerFactory);
+    }
 
     @Override
     public Deployer createDeployer(MavenSession session) {
@@ -57,7 +62,7 @@ public class FullReleaseDeployerFactory implements DeployerFactory {
                 resolveBoolean(org.jreleaser.model.api.JReleaserContext.STRICT, strict),
                 Collections.emptyList(),
                 Collections.emptyList());
-        return new FullReleaseDeployer(context);
+        return new FullReleaseDeployer(localStagingDeployerFactory.createDeployer(session), context);
     }
 
     protected JReleaserContext.Configurer resolveConfigurer(Path configFile) {
