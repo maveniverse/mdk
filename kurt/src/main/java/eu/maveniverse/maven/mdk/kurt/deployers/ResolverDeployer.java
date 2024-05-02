@@ -1,4 +1,4 @@
-package eu.maveniverse.maven.mdk.kurt.internal;
+package eu.maveniverse.maven.mdk.kurt.deployers;
 
 import static java.util.Objects.requireNonNull;
 

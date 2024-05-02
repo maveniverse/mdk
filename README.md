@@ -21,7 +21,8 @@ The crux MDK tries to implement is following:
 This experiment contains 3 modules:
 * `plugin` is 1:1 copy of [maven-deploy-plugin](https://github.com/apache/maven-deploy-plugin) with all of it ITs
 * `api` (TBD rename to `spi`) is a small artifact that defines SPI for plugin
-* `kurt` is one SPI implementation and Maven extension
+* `kurt` is SPI implementation and Maven extension in one
+* `kurt-jreleaser` is Kurt extension and [JReleaser](https://jreleaser.org/) integration
 
 The goal is ability to "take over" behaviour of `maven-deploy-plugin` with smallest interference into project itself.
 
@@ -54,6 +55,8 @@ With MDK present, user does following change to `.mvn/extensions.xml`:
 </extensions>
 ```
 
+(Note: if one would use JReleaser, then `kurt-jreleaser` is artifactId)
+
 And Maven Core activates this extension. Following change happens (see [extension.xml](kurt/src/main/resources/META-INF/maven/extension.xml)).
 * The extension is pulled into Maven Extension (along with dependencies)
 * the `api` artifact becomes "Maven provided" (see `exportedArtifact`).
@@ -72,14 +75,17 @@ Kurt integrates into Maven Lifecycle, and provides following deployers:
 * "resolver" -- is almost same as `maven-deploy-plugin` is (this is the default, ensures that Maven w/ Kurt installed but not configured behaves in same way as without it)
 * "local-staging" -- stages all artifacts locally, into (by default) top level project `target/staging-deploy` directory.
 * "remote-staging" -- stages all artifacts into (explicitly given) remote repository TBD
-* "jreleaser" -- this will combine "local-staging" and JReleaser "full-release" workflow TBD
+
+Kurt JReleaser extension adds more:
+* "jreleaser-full-release" -- this combines "local-staging" and JReleaser "full-release" workflow, as JReleaser 
+  documentation explains, but does not require POM changes.
 
 In short, idea is to be the least intrusive and future-proof, while have access to always changing current (and 
 possible future) services for Artifact publishing.
 
 # JReleaser reuse
 
-Frankly, MDK was inspired by Sonatype Central publishing changes, but also by the fact that JReleaser already
+Frankly, MDK was inspired by upcoming Sonatype Central publishing changes, but also by the fact that JReleaser already
 provided solutions to all problems. Still, JReleases needs some [hoops and loops](https://jreleaser.org/guide/latest/examples/maven/index.html)
 to make it work, and these all require non-trivial changes to POMs. The idea is that MDK could handle all this: 
 it can "stage locally", and then just invoke JReleases pointing it locally staged repository, and it that "takes over" 

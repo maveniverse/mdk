@@ -1,4 +1,4 @@
-package eu.maveniverse.maven.mdk.kurt.internal;
+package eu.maveniverse.maven.mdk.kurt.deployers;
 
 import static java.util.Objects.requireNonNull;
 
@@ -30,6 +30,6 @@ public class RemoteStagingDeployerFactory implements DeployerFactory {
         String url = KurtConfig.REMOTE_STAGING_URL.require(session);
         RemoteRepository stagingRepository = repositorySystem.newDeploymentRepository(
                 session.getRepositorySession(), new RemoteRepository.Builder(id, "default", url).build());
-        return new StagingDeployer(NAME, repositorySystem, stagingRepository);
+        return new RemoteStagingDeployer(repositorySystem, stagingRepository);
     }
 }

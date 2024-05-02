@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension>
+    <exportedPackages>
+        <exportedPackage>eu.maveniverse.maven.mdk.kurt.jreleaser</exportedPackage>
+    </exportedPackages>
+
+    <exportedArtifacts>
+        <exportedArtifact>eu.maveniverse.maven.mdk:kurt-releaser</exportedArtifact>
+    </exportedArtifacts>
+</extension>

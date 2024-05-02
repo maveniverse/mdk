@@ -1,4 +1,4 @@
-package eu.maveniverse.maven.mdk.kurt.internal;
+package eu.maveniverse.maven.mdk.kurt.jreleaser;
 
 import static org.jreleaser.util.FileUtils.resolveOutputDirectory;
 
@@ -23,9 +23,9 @@ import org.jreleaser.util.Env;
 import org.jreleaser.util.StringUtils;
 
 @Singleton
-@Named(JReleaserDeployerFactory.NAME)
-public class JReleaserDeployerFactory implements DeployerFactory {
-    public static final String NAME = "jreleaser";
+@Named(FullReleaseDeployerFactory.NAME)
+public class FullReleaseDeployerFactory implements DeployerFactory {
+    public static final String NAME = "jreleaser-full-release";
 
     protected File basedir;
     protected File configFile;
@@ -38,7 +38,7 @@ public class JReleaserDeployerFactory implements DeployerFactory {
     protected Path actualBasedir;
 
     @Inject
-    public JReleaserDeployerFactory() {}
+    public FullReleaseDeployerFactory() {}
 
     @Override
     public Deployer createDeployer(MavenSession session) {
@@ -57,7 +57,7 @@ public class JReleaserDeployerFactory implements DeployerFactory {
                 resolveBoolean(org.jreleaser.model.api.JReleaserContext.STRICT, strict),
                 Collections.emptyList(),
                 Collections.emptyList());
-        return new JReleaserDeployer(context);
+        return new FullReleaseDeployer(context);
     }
 
     protected JReleaserContext.Configurer resolveConfigurer(Path configFile) {

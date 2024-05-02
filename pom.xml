@@ -37,6 +37,7 @@
     <module>api</module>
     <module>plugin</module>
     <module>kurt</module>
+    <module>kurt-jreleaser</module>
   </modules>
 
   <scm>
@@ -80,6 +81,11 @@
       <dependency>
         <groupId>eu.maveniverse.maven.mdk</groupId>
         <artifactId>api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>eu.maveniverse.maven.mdk</groupId>
+        <artifactId>kurt</artifactId>
         <version>${project.version}</version>
       </dependency>
 

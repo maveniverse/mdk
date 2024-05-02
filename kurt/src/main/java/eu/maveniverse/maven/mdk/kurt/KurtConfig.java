@@ -20,7 +20,7 @@ package eu.maveniverse.maven.mdk.kurt;
 
 import static java.util.Objects.requireNonNull;
 
-import eu.maveniverse.maven.mdk.kurt.internal.ResolverDeployerFactory;
+import eu.maveniverse.maven.mdk.kurt.deployers.ResolverDeployerFactory;
 import java.util.Map;
 import org.apache.maven.execution.MavenSession;
 import org.eclipse.aether.RepositorySystemSession;

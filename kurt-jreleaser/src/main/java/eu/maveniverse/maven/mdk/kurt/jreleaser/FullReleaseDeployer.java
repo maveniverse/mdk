@@ -1,7 +1,8 @@
-package eu.maveniverse.maven.mdk.kurt.internal;
+package eu.maveniverse.maven.mdk.kurt.jreleaser;
 
 import static java.util.Objects.requireNonNull;
 
+import eu.maveniverse.maven.mdk.kurt.deployers.DeployerSupport;
 import java.util.Map;
 import org.apache.maven.execution.MavenSession;
 import org.eclipse.aether.artifact.Artifact;
@@ -15,11 +16,11 @@ import org.jreleaser.workflow.Workflows;
  * A JReleaser deployer, that does not accept SNAPSHOT artifacts. It uses "full-release" workflow
  * of JReleaser.
  */
-public class JReleaserDeployer extends DeployerSupport {
+public class FullReleaseDeployer extends DeployerSupport {
     private final JReleaserContext context;
 
-    public JReleaserDeployer(JReleaserContext context) {
-        super(JReleaserDeployerFactory.NAME);
+    public FullReleaseDeployer(JReleaserContext context) {
+        super(FullReleaseDeployerFactory.NAME);
         this.context = requireNonNull(context);
     }
 

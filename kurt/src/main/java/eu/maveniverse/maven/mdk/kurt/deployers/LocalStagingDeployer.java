@@ -1,7 +1,9 @@
-package eu.maveniverse.maven.mdk.kurt.internal;
+package eu.maveniverse.maven.mdk.kurt.deployers;
 
 import static java.util.Objects.requireNonNull;
 
+import eu.maveniverse.maven.mdk.kurt.KurtConfig;
+import java.nio.file.Path;
 import java.util.Map;
 import org.apache.maven.execution.MavenSession;
 import org.eclipse.aether.RepositorySystem;
@@ -11,16 +13,20 @@ import org.eclipse.aether.deployment.DeploymentException;
 import org.eclipse.aether.repository.RemoteRepository;
 
 /**
- * A "staging" deployer that does not accept SNAPSHOT artifacts. It may stage locally or remotely.
+ * A "local staging" deployer that does not accept SNAPSHOT artifacts.
  */
-public class StagingDeployer extends DeployerSupport {
+public class LocalStagingDeployer extends DeployerSupport {
     private final RepositorySystem repositorySystem;
-    private final RemoteRepository stagingRepository;
+    private final Path localStagingDirectory;
 
-    public StagingDeployer(String name, RepositorySystem repositorySystem, RemoteRepository stagingRepository) {
-        super(name);
+    public LocalStagingDeployer(RepositorySystem repositorySystem, Path localStagingDirectory) {
+        super(LocalStagingDeployerFactory.NAME);
         this.repositorySystem = requireNonNull(repositorySystem);
-        this.stagingRepository = requireNonNull(stagingRepository);
+        this.localStagingDirectory = requireNonNull(localStagingDirectory);
+    }
+
+    public Path getLocalStagingDirectory() {
+        return localStagingDirectory;
     }
 
     @Override
@@ -34,6 +40,14 @@ public class StagingDeployer extends DeployerSupport {
     @Override
     public void processAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
             throws DeploymentException {
+        RemoteRepository stagingRepository = repositorySystem.newDeploymentRepository(
+                session.getRepositorySession(),
+                new RemoteRepository.Builder(
+                                KurtConfig.LOCAL_STAGING_ID.require(session),
+                                "default",
+                                localStagingDirectory.toFile().toURI().toASCIIString())
+                        .build());
+
         for (DeployRequest dr : deployRequests.values()) {
             DeployRequest stagingRequest = new DeployRequest();
             stagingRequest.setRepository(stagingRepository);
