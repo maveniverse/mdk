@@ -10,7 +10,6 @@ import org.apache.maven.execution.MavenSession;
 import org.eclipse.aether.deployment.DeployRequest;
 import org.eclipse.aether.deployment.DeploymentException;
 import org.eclipse.aether.repository.RemoteRepository;
-import org.jreleaser.model.internal.JReleaserContext;
 import org.jreleaser.workflow.Workflows;
 
 /**
@@ -20,12 +19,12 @@ import org.jreleaser.workflow.Workflows;
  */
 public class FullReleaseDeployer extends DeployerSupport {
     private final LocalStagingDeployer localStagingDeployer;
-    private final JReleaserContext context;
+    private final JReleaserContextFactory contextFactory;
 
-    public FullReleaseDeployer(LocalStagingDeployer localStagingDeployer, JReleaserContext context) {
+    public FullReleaseDeployer(LocalStagingDeployer localStagingDeployer, JReleaserContextFactory contextFactory) {
         super(FullReleaseDeployerFactory.NAME);
         this.localStagingDeployer = requireNonNull(localStagingDeployer);
-        this.context = requireNonNull(context);
+        this.contextFactory = requireNonNull(contextFactory);
     }
 
     @Override
@@ -38,7 +37,7 @@ public class FullReleaseDeployer extends DeployerSupport {
             throws DeploymentException {
         localStagingDeployer.processAll(session, deployRequests);
         Path localStagingDirectory = localStagingDeployer.getLocalStagingDirectory();
-        // TBD: let JReleaser take over from here
-        Workflows.fullRelease(context).execute();
+        Workflows.fullRelease(contextFactory.createContext(session, localStagingDirectory))
+                .execute();
     }
 }

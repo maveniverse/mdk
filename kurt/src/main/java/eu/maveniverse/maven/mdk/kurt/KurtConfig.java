@@ -30,10 +30,14 @@ import org.eclipse.aether.RepositorySystemSession;
  * session life-span and there is no need for any dynamism. Once set, should remain same during the existence of
  * session.
  */
-public class KurtConfig {
+public final class KurtConfig {
     private final String name;
     private final String defaultValue;
     private final String[] keys;
+
+    public static KurtConfig create(String name, String defaultValue, String... keys) {
+        return new KurtConfig(name, defaultValue, keys);
+    }
 
     private KurtConfig(String name, String defaultValue, String... keys) {
         this.name = requireNonNull(name);

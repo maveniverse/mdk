@@ -1,0 +1,116 @@
+package eu.maveniverse.maven.mdk.kurt.jreleaser;
+
+import static java.util.Objects.requireNonNull;
+
+import eu.maveniverse.maven.mdk.kurt.KurtConfig;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import org.apache.maven.execution.MavenSession;
+import org.jreleaser.config.JReleaserConfigLoader;
+import org.jreleaser.engine.context.ContextCreator;
+import org.jreleaser.logging.SimpleJReleaserLoggerAdapter;
+import org.jreleaser.model.Active;
+import org.jreleaser.model.internal.JReleaserContext;
+import org.jreleaser.model.internal.JReleaserModel;
+import org.jreleaser.model.internal.deploy.maven.MavenCentralMavenDeployer;
+import org.jreleaser.model.internal.deploy.maven.Nexus2MavenDeployer;
+
+@Singleton
+@Named
+public class JReleaserContextFactory {
+    private static final String JRELEASER_PREFIX = "jreleaser.";
+
+    public static final KurtConfig JRELEASER_CONFIG_FILE =
+            KurtConfig.create("configFile", ".mvn/jreleaser.yml", JRELEASER_PREFIX + "configFile");
+    public static final KurtConfig JRELEASER_OUTPUT_DIRECTORY =
+            KurtConfig.create("outputDirectory", "jreleaser", JRELEASER_PREFIX + "outputDirectory");
+    public static final KurtConfig JRELEASER_DRY_RUN =
+            KurtConfig.create("dryRun", Boolean.FALSE.toString(), JRELEASER_PREFIX + "dryRun");
+    public static final KurtConfig JRELEASER_GIT_ROOT_SEARCH =
+            KurtConfig.create("gitRootSearch", Boolean.FALSE.toString(), JRELEASER_PREFIX + "gitRootSearch");
+    public static final KurtConfig JRELEASER_STRICT =
+            KurtConfig.create("strict", Boolean.FALSE.toString(), JRELEASER_PREFIX + "strict");
+    public static final KurtConfig JRELEASER_TARGET = KurtConfig.create("target", null, JRELEASER_PREFIX + "target");
+
+    public JReleaserContext createContext(MavenSession session, Path stagingDirectory) {
+        String target = JRELEASER_TARGET.require(session);
+
+        String service;
+        String url;
+        // TODO: externalize config
+        switch (target) {
+            case "sonatype-oss": {
+                service = "nx2";
+                url = "https://oss.sonatype.org/service/local";
+                break;
+            }
+            case "sonatype-s01": {
+                service = "nx2";
+                url = "https://s01.oss.sonatype.org/service/local";
+                break;
+            }
+            case "sonatype-maven-central": {
+                service = "central";
+                url = "https://central.sonatype.com/api/v1/publisher";
+                break;
+            }
+            default: {
+                throw new IllegalArgumentException("Unknown target: " + target);
+            }
+        }
+
+        Path configFile = session.getTopLevelProject()
+                .getBasedir()
+                .toPath()
+                .resolve(JRELEASER_CONFIG_FILE.require(session))
+                .toAbsolutePath();
+        Path outputDirectory = Paths.get(session.getTopLevelProject().getBuild().getDirectory())
+                .resolve(JRELEASER_OUTPUT_DIRECTORY.require(session))
+                .toAbsolutePath();
+
+        JReleaserModel model;
+        if (Files.isRegularFile(configFile)) {
+            model = JReleaserConfigLoader.loadConfig(configFile);
+        } else {
+            model = new JReleaserModel();
+            model.getSigning().setActive(Active.NEVER);
+            if ("nx2".equals(service)) {
+                Nexus2MavenDeployer nexus2MavenDeployer = new Nexus2MavenDeployer();
+                nexus2MavenDeployer.setActive(Active.ALWAYS);
+                nexus2MavenDeployer.setUrl(requireNonNull(url));
+                nexus2MavenDeployer.setCloseRepository(true);
+                nexus2MavenDeployer.setReleaseRepository(false);
+                nexus2MavenDeployer.setApplyMavenCentralRules(true);
+                nexus2MavenDeployer.setStagingRepositories(Collections.singletonList(stagingDirectory.toString()));
+
+                model.getDeploy().getMaven().addNexus2(nexus2MavenDeployer);
+            } else {
+                MavenCentralMavenDeployer mavenCentralMavenDeployer = new MavenCentralMavenDeployer();
+                mavenCentralMavenDeployer.setActive(Active.ALWAYS);
+                mavenCentralMavenDeployer.setUrl(requireNonNull(url));
+                mavenCentralMavenDeployer.setApplyMavenCentralRules(true);
+                mavenCentralMavenDeployer.setStagingRepositories(
+                        Collections.singletonList(stagingDirectory.toString()));
+
+                model.getDeploy().getMaven().addMavenCentral(mavenCentralMavenDeployer);
+            }
+        }
+
+        return ContextCreator.create(
+                new SimpleJReleaserLoggerAdapter(),
+                JReleaserContext.Configurer.MAVEN,
+                org.jreleaser.model.api.JReleaserContext.Mode.FULL,
+                model,
+                session.getTopLevelProject().getBasedir().toPath(),
+                outputDirectory,
+                Boolean.parseBoolean(JRELEASER_DRY_RUN.require(session)),
+                Boolean.parseBoolean(JRELEASER_GIT_ROOT_SEARCH.require(session)),
+                Boolean.parseBoolean(JRELEASER_STRICT.require(session)),
+                Collections.emptyList(),
+                Collections.emptyList());
+    }
+}
