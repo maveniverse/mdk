@@ -18,6 +18,7 @@ import org.jreleaser.model.internal.JReleaserContext;
 import org.jreleaser.model.internal.JReleaserModel;
 import org.jreleaser.model.internal.deploy.maven.MavenCentralMavenDeployer;
 import org.jreleaser.model.internal.deploy.maven.Nexus2MavenDeployer;
+import org.jreleaser.model.internal.release.GithubReleaser;
 
 @Singleton
 @Named
@@ -82,22 +83,38 @@ public class JReleaserContextFactory {
             model = JReleaserConfigLoader.loadConfig(configFile);
         } else {
             model = new JReleaserModel();
+            model.getProject().getJava().setGroupId(session.getTopLevelProject().getGroupId());
+            model.getProject()
+                    .getJava()
+                    .setArtifactId(session.getTopLevelProject().getArtifactId());
+            model.getProject().getJava().setVersion(session.getTopLevelProject().getVersion());
+            model.getProject().setVersion(session.getTopLevelProject().getVersion());
+
             model.getSigning().setActive(Active.NEVER);
+            GithubReleaser githubReleaser = new GithubReleaser();
+            githubReleaser.setSkipRelease(true);
+            githubReleaser.setToken("fake");
+            model.getRelease().setGithub(githubReleaser);
+
             if ("nx2".equals(service)) {
                 Nexus2MavenDeployer nexus2MavenDeployer = new Nexus2MavenDeployer();
+                nexus2MavenDeployer.setName("maven-central");
                 nexus2MavenDeployer.setActive(Active.ALWAYS);
                 nexus2MavenDeployer.setUrl(requireNonNull(url));
                 nexus2MavenDeployer.setCloseRepository(true);
                 nexus2MavenDeployer.setReleaseRepository(false);
-                nexus2MavenDeployer.setApplyMavenCentralRules(true);
+                nexus2MavenDeployer.setApplyMavenCentralRules(false);
+                nexus2MavenDeployer.setSign(false);
                 nexus2MavenDeployer.setStagingRepositories(Collections.singletonList(stagingDirectory.toString()));
 
                 model.getDeploy().getMaven().addNexus2(nexus2MavenDeployer);
             } else {
                 MavenCentralMavenDeployer mavenCentralMavenDeployer = new MavenCentralMavenDeployer();
+                mavenCentralMavenDeployer.setName("maven-central");
                 mavenCentralMavenDeployer.setActive(Active.ALWAYS);
                 mavenCentralMavenDeployer.setUrl(requireNonNull(url));
-                mavenCentralMavenDeployer.setApplyMavenCentralRules(true);
+                mavenCentralMavenDeployer.setApplyMavenCentralRules(false);
+                mavenCentralMavenDeployer.setSign(false);
                 mavenCentralMavenDeployer.setStagingRepositories(
                         Collections.singletonList(stagingDirectory.toString()));
 
