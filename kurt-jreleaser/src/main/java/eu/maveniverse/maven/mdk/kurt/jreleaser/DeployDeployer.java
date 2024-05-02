@@ -1,17 +1,16 @@
 package eu.maveniverse.maven.mdk.kurt.jreleaser;
 
+import static java.util.Objects.requireNonNull;
+
 import eu.maveniverse.maven.mdk.kurt.deployers.DeployerSupport;
 import eu.maveniverse.maven.mdk.kurt.deployers.LocalStagingDeployer;
+import java.util.Map;
 import org.apache.maven.execution.MavenSession;
 import org.eclipse.aether.deployment.DeployRequest;
 import org.eclipse.aether.deployment.DeploymentException;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.jreleaser.model.internal.JReleaserContext;
 import org.jreleaser.workflow.Workflows;
-
-import java.util.Map;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * A JReleaser deployer, that does not accept SNAPSHOT artifacts. It uses "deploy" workflow

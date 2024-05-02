@@ -35,7 +35,11 @@ public class JReleaserContextFactory {
             KurtConfig.create("gitRootSearch", Boolean.FALSE.toString(), JRELEASER_PREFIX + "gitRootSearch");
     public static final KurtConfig JRELEASER_STRICT =
             KurtConfig.create("strict", Boolean.FALSE.toString(), JRELEASER_PREFIX + "strict");
+    public static final KurtConfig JRELEASER_APPLY_MAVEN_CENTRAL_RULES = KurtConfig.create(
+            "applyMavenCentralRules", Boolean.FALSE.toString(), JRELEASER_PREFIX + "applyMavenCentralRules");
     public static final KurtConfig JRELEASER_TARGET = KurtConfig.create("target", null, JRELEASER_PREFIX + "target");
+    public static final KurtConfig JRELEASER_PROFILE_ID =
+            KurtConfig.create("profileId", null, JRELEASER_PREFIX + "profileId");
 
     public JReleaserContext createContext(MavenSession session, Path stagingDirectory) {
         String target = JRELEASER_TARGET.require(session);
@@ -103,7 +107,9 @@ public class JReleaserContextFactory {
                 nexus2MavenDeployer.setUrl(requireNonNull(url));
                 nexus2MavenDeployer.setCloseRepository(true);
                 nexus2MavenDeployer.setReleaseRepository(false);
-                nexus2MavenDeployer.setApplyMavenCentralRules(false);
+                nexus2MavenDeployer.setApplyMavenCentralRules(
+                        Boolean.parseBoolean(JRELEASER_APPLY_MAVEN_CENTRAL_RULES.require(session)));
+                nexus2MavenDeployer.setStagingProfileId(JRELEASER_PROFILE_ID.getOrDefault(session));
                 nexus2MavenDeployer.setSign(false);
                 nexus2MavenDeployer.setStagingRepositories(Collections.singletonList(stagingDirectory.toString()));
 
@@ -113,7 +119,8 @@ public class JReleaserContextFactory {
                 mavenCentralMavenDeployer.setName("maven-central");
                 mavenCentralMavenDeployer.setActive(Active.ALWAYS);
                 mavenCentralMavenDeployer.setUrl(requireNonNull(url));
-                mavenCentralMavenDeployer.setApplyMavenCentralRules(false);
+                mavenCentralMavenDeployer.setApplyMavenCentralRules(
+                        Boolean.parseBoolean(JRELEASER_APPLY_MAVEN_CENTRAL_RULES.require(session)));
                 mavenCentralMavenDeployer.setSign(false);
                 mavenCentralMavenDeployer.setStagingRepositories(
                         Collections.singletonList(stagingDirectory.toString()));

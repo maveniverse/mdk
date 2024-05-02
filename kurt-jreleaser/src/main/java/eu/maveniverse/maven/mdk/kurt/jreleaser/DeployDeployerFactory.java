@@ -1,16 +1,15 @@
 package eu.maveniverse.maven.mdk.kurt.jreleaser;
 
+import static java.util.Objects.requireNonNull;
+
 import eu.maveniverse.maven.mdk.kurt.Deployer;
 import eu.maveniverse.maven.mdk.kurt.DeployerFactory;
 import eu.maveniverse.maven.mdk.kurt.deployers.LocalStagingDeployer;
 import eu.maveniverse.maven.mdk.kurt.deployers.LocalStagingDeployerFactory;
-import org.apache.maven.execution.MavenSession;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-
-import static java.util.Objects.requireNonNull;
+import org.apache.maven.execution.MavenSession;
 
 @Singleton
 @Named(DeployDeployerFactory.NAME)
