@@ -44,16 +44,10 @@ public class KurtConfig {
         }
     }
 
-    /**
-     * The name.
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Gets value or return default value. May return {@code null} (if no value present and default is {@code null}).
-     */
     public String getOrDefault(Map<String, Object> map) {
         String result;
         for (String key : keys) {
@@ -76,7 +70,7 @@ public class KurtConfig {
     public String require(Map<String, Object> map) {
         String result = getOrDefault(map);
         if (result == null) {
-            throw new IllegalArgumentException("Parameter " + name + " is required.");
+            throw new IllegalArgumentException("Parameter " + keys[0] + " is required.");
         }
         return result;
     }
@@ -96,4 +90,16 @@ public class KurtConfig {
 
     public static final KurtConfig DEPLOY_AT_END =
             new KurtConfig("deployAtEnd", Boolean.TRUE.toString(), KURT_PREFIX + "deployAtEnd");
+
+    public static final KurtConfig LOCAL_STAGING_ID =
+            new KurtConfig("localStagingId", "staging-deploy", KURT_PREFIX + "localStagingId");
+
+    public static final KurtConfig LOCAL_STAGING_DIRECTORY =
+            new KurtConfig("localStagingDirectory", "staging-deploy", KURT_PREFIX + "localStagingDirectory");
+
+    public static final KurtConfig REMOTE_STAGING_ID =
+            new KurtConfig("remoteStagingId", "staging-deploy", KURT_PREFIX + "remoteStagingId");
+
+    public static final KurtConfig REMOTE_STAGING_URL =
+            new KurtConfig("remoteStagingUrl", null, KURT_PREFIX + "remoteStagingUrl");
 }

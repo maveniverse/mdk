@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import eu.maveniverse.maven.mdk.kurt.Deployer;
 import eu.maveniverse.maven.mdk.kurt.DeployerFactory;
+import eu.maveniverse.maven.mdk.kurt.KurtConfig;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.inject.Inject;
@@ -28,11 +29,11 @@ public class LocalStagingDeployerFactory implements DeployerFactory {
     @Override
     public Deployer createDeployer(MavenSession session) {
         Path target = Paths.get(session.getTopLevelProject().getBuild().getDirectory());
-        Path staging = target.resolve("staging-deploy");
+        Path staging = target.resolve(KurtConfig.LOCAL_STAGING_DIRECTORY.require(session));
         RemoteRepository stagingRepository = repositorySystem.newDeploymentRepository(
                 session.getRepositorySession(),
                 new RemoteRepository.Builder(
-                                "staging-deploy",
+                                KurtConfig.LOCAL_STAGING_ID.require(session),
                                 "default",
                                 staging.toFile().toURI().toASCIIString())
                         .build());
