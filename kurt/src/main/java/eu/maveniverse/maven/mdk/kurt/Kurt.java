@@ -67,7 +67,7 @@ public class Kurt extends AbstractMavenLifecycleParticipant implements DeployerS
     }
 
     @Override
-    public void afterSessionStart(MavenSession session) throws MavenExecutionException {
+    public void afterProjectsRead(MavenSession session) throws MavenExecutionException {
         if (sessionRef.compareAndSet(null, session)) {
             RepositorySystemSession repoSession = session.getRepositorySession();
             String deployerName = KurtConfig.DEPLOYER.require(repoSession);
@@ -75,7 +75,7 @@ public class Kurt extends AbstractMavenLifecycleParticipant implements DeployerS
             if (deployerFactory == null) {
                 throw new MavenExecutionException(
                         "Non existing deployer selected, supported ones are: " + deployerFactories.keySet(),
-                        session.getCurrentProject().getFile());
+                        (Throwable) null);
             }
             repoSession
                     .getData()

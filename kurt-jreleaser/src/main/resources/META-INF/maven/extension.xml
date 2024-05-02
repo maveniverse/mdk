@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension>
     <exportedPackages>
+        <exportedPackage>org.apache.maven.plugins.deploy.spi</exportedPackage>
+        <exportedPackage>eu.maveniverse.maven.mdk.kurt</exportedPackage>
         <exportedPackage>eu.maveniverse.maven.mdk.kurt.jreleaser</exportedPackage>
     </exportedPackages>
 
     <exportedArtifacts>
+        <exportedArtifact>eu.maveniverse.maven.mdk:api</exportedArtifact>
+        <exportedArtifact>eu.maveniverse.maven.mdk:kurt</exportedArtifact>
         <exportedArtifact>eu.maveniverse.maven.mdk:kurt-releaser</exportedArtifact>
     </exportedArtifacts>
 </extension>

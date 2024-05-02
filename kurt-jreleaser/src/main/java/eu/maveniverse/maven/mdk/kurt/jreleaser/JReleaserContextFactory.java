@@ -43,6 +43,11 @@ public class JReleaserContextFactory {
         String url;
         // TODO: externalize config
         switch (target) {
+            case "asf-repository": {
+                service = "nx2";
+                url = "https://repository.apache.org/service/local";
+                break;
+            }
             case "sonatype-oss": {
                 service = "nx2";
                 url = "https://oss.sonatype.org/service/local";
