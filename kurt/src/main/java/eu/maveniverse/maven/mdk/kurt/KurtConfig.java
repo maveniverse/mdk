@@ -18,20 +18,25 @@
  */
 package eu.maveniverse.maven.mdk.kurt;
 
-import java.util.Map;
-
 import static java.util.Objects.requireNonNull;
 
+import eu.maveniverse.maven.mdk.kurt.internal.ResolverDeployerFactory;
+import java.util.Map;
+import org.apache.maven.execution.MavenSession;
+import org.eclipse.aether.RepositorySystemSession;
+
 /**
- * Kurt configuration.
+ * Kurt's configuration. It uses {@link RepositorySystemSession#getConfigProperties()} as these are covering whole
+ * session life-span and there is no need for any dynamism. Once set, should remain same during the existence of
+ * session.
  */
 public class KurtConfig {
-    private final String description;
+    private final String name;
     private final String defaultValue;
     private final String[] keys;
 
-    private KurtConfig(String description, String defaultValue, String... keys) {
-        this.description = requireNonNull(description);
+    private KurtConfig(String name, String defaultValue, String... keys) {
+        this.name = requireNonNull(name);
         this.defaultValue = defaultValue; // nullable
         this.keys = keys;
         if (keys.length < 1) {
@@ -39,8 +44,11 @@ public class KurtConfig {
         }
     }
 
-    public String getDescription() {
-        return description;
+    /**
+     * The name.
+     */
+    public String getName() {
+        return name;
     }
 
     /**
@@ -57,10 +65,35 @@ public class KurtConfig {
         return defaultValue;
     }
 
-    public String require(Map<String, Object> map) {
-
+    public String getOrDefault(RepositorySystemSession session) {
+        return getOrDefault(session.getConfigProperties());
     }
 
-    public static final String KURT_PREFIX = "kurt.";
-    public static final String KURT_DEPLOYER = KURT_PREFIX + "deployer";
+    public String getOrDefault(MavenSession session) {
+        return getOrDefault(session.getRepositorySession());
+    }
+
+    public String require(Map<String, Object> map) {
+        String result = getOrDefault(map);
+        if (result == null) {
+            throw new IllegalArgumentException("Parameter " + name + " is required.");
+        }
+        return result;
+    }
+
+    public String require(RepositorySystemSession session) {
+        return require(session.getConfigProperties());
+    }
+
+    public String require(MavenSession session) {
+        return require(session.getRepositorySession());
+    }
+
+    private static final String KURT_PREFIX = "kurt.";
+
+    public static final KurtConfig DEPLOYER =
+            new KurtConfig("deployer", ResolverDeployerFactory.NAME, KURT_PREFIX + "deployer");
+
+    public static final KurtConfig DEPLOY_AT_END =
+            new KurtConfig("deployAtEnd", Boolean.TRUE.toString(), KURT_PREFIX + "deployAtEnd");
 }

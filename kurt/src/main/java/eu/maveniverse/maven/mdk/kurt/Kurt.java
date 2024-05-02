@@ -20,7 +20,6 @@ package eu.maveniverse.maven.mdk.kurt;
 
 import static java.util.Objects.requireNonNull;
 
-import eu.maveniverse.maven.mdk.kurt.internal.ResolverDeployerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,13 +38,12 @@ import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.deployment.DeployRequest;
 import org.eclipse.aether.deployment.DeploymentException;
 import org.eclipse.aether.repository.RemoteRepository;
-import org.eclipse.aether.util.ConfigUtils;
 import org.eclipse.sisu.Priority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Kurt deployer SPI
+ * Kurt Hectic reports.
  */
 @SessionScoped
 @Named("kurt")
@@ -72,7 +70,7 @@ public class Kurt extends AbstractMavenLifecycleParticipant implements DeployerS
     public void afterSessionStart(MavenSession session) throws MavenExecutionException {
         if (sessionRef.compareAndSet(null, session)) {
             RepositorySystemSession repoSession = session.getRepositorySession();
-            String deployerName = ConfigUtils.getString(repoSession, ResolverDeployerFactory.NAME, KurtConfig.KURT_DEPLOYER);
+            String deployerName = KurtConfig.DEPLOYER.require(repoSession);
             DeployerFactory deployerFactory = deployerFactories.get(deployerName);
             if (deployerFactory == null) {
                 throw new MavenExecutionException(

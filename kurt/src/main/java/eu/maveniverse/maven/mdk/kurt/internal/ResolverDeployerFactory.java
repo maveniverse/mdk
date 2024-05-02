@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import eu.maveniverse.maven.mdk.kurt.Deployer;
 import eu.maveniverse.maven.mdk.kurt.DeployerFactory;
+import eu.maveniverse.maven.mdk.kurt.KurtConfig;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -24,7 +25,6 @@ public class ResolverDeployerFactory implements DeployerFactory {
 
     @Override
     public Deployer createDeployer(MavenSession session) {
-        boolean deployAtEnd = true;
-        return new ResolverDeployer(repositorySystem, deployAtEnd);
+        return new ResolverDeployer(repositorySystem, Boolean.parseBoolean(KurtConfig.DEPLOY_AT_END.require(session)));
     }
 }
