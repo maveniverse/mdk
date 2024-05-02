@@ -1,8 +1,13 @@
 package eu.maveniverse.maven.mdk.kurt.jreleaser;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNull;
 
 import eu.maveniverse.maven.mdk.kurt.KurtConfig;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,13 +17,15 @@ import javax.inject.Singleton;
 import org.apache.maven.execution.MavenSession;
 import org.jreleaser.config.JReleaserConfigLoader;
 import org.jreleaser.engine.context.ContextCreator;
-import org.jreleaser.logging.SimpleJReleaserLoggerAdapter;
+import org.jreleaser.logging.JReleaserLogger;
 import org.jreleaser.model.Active;
 import org.jreleaser.model.internal.JReleaserContext;
 import org.jreleaser.model.internal.JReleaserModel;
 import org.jreleaser.model.internal.deploy.maven.MavenCentralMavenDeployer;
 import org.jreleaser.model.internal.deploy.maven.Nexus2MavenDeployer;
 import org.jreleaser.model.internal.release.GithubReleaser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 @Named
@@ -41,7 +48,9 @@ public class JReleaserContextFactory {
     public static final KurtConfig JRELEASER_PROFILE_ID =
             KurtConfig.create("profileId", null, JRELEASER_PREFIX + "profileId");
 
-    public JReleaserContext createContext(MavenSession session, Path stagingDirectory) {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    public JReleaserContext createContext(MavenSession session, Path stagingDirectory) throws IOException {
         String target = JRELEASER_TARGET.require(session);
 
         String service;
@@ -130,7 +139,7 @@ public class JReleaserContextFactory {
         }
 
         return ContextCreator.create(
-                new SimpleJReleaserLoggerAdapter(),
+                getLogger(outputDirectory),
                 JReleaserContext.Configurer.MAVEN,
                 org.jreleaser.model.api.JReleaserContext.Mode.FULL,
                 model,
@@ -141,5 +150,15 @@ public class JReleaserContextFactory {
                 Boolean.parseBoolean(JRELEASER_STRICT.require(session)),
                 Collections.emptyList(),
                 Collections.emptyList());
+    }
+
+    protected JReleaserLogger getLogger(Path outputDirectory) throws IOException {
+        java.nio.file.Files.createDirectories(outputDirectory);
+        return new JReleaserLoggerAdapter(
+                new PrintWriter(
+                        new BufferedWriter(new OutputStreamWriter(
+                                Files.newOutputStream(outputDirectory.resolve("trace.log")), UTF_8)),
+                        true),
+                logger);
     }
 }

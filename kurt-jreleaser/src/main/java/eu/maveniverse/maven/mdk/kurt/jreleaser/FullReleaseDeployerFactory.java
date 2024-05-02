@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import eu.maveniverse.maven.mdk.kurt.Deployer;
 import eu.maveniverse.maven.mdk.kurt.DeployerFactory;
-import eu.maveniverse.maven.mdk.kurt.deployers.LocalStagingDeployer;
 import eu.maveniverse.maven.mdk.kurt.deployers.LocalStagingDeployerFactory;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,9 +27,6 @@ public class FullReleaseDeployerFactory implements DeployerFactory {
 
     @Override
     public Deployer createDeployer(MavenSession session) {
-        LocalStagingDeployer localStagingDeployer = localStagingDeployerFactory.createDeployer(session);
-        return new FullReleaseDeployer(
-                localStagingDeployer,
-                contextFactory.createContext(session, localStagingDeployer.getLocalStagingDirectory()));
+        return new FullReleaseDeployer(localStagingDeployerFactory.createDeployer(session), contextFactory);
     }
 }

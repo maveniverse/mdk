@@ -4,12 +4,12 @@ import static java.util.Objects.requireNonNull;
 
 import eu.maveniverse.maven.mdk.kurt.deployers.DeployerSupport;
 import eu.maveniverse.maven.mdk.kurt.deployers.LocalStagingDeployer;
+import java.io.IOException;
 import java.util.Map;
 import org.apache.maven.execution.MavenSession;
 import org.eclipse.aether.deployment.DeployRequest;
 import org.eclipse.aether.deployment.DeploymentException;
 import org.eclipse.aether.repository.RemoteRepository;
-import org.jreleaser.model.internal.JReleaserContext;
 import org.jreleaser.workflow.Workflows;
 
 /**
@@ -19,12 +19,12 @@ import org.jreleaser.workflow.Workflows;
  */
 public class DeployDeployer extends DeployerSupport {
     private final LocalStagingDeployer localStagingDeployer;
-    private final JReleaserContext context;
+    private final JReleaserContextFactory contextFactory;
 
-    public DeployDeployer(LocalStagingDeployer localStagingDeployer, JReleaserContext context) {
+    public DeployDeployer(LocalStagingDeployer localStagingDeployer, JReleaserContextFactory contextFactory) {
         super(FullReleaseDeployerFactory.NAME);
         this.localStagingDeployer = requireNonNull(localStagingDeployer);
-        this.context = requireNonNull(context);
+        this.contextFactory = requireNonNull(contextFactory);
     }
 
     @Override
@@ -34,8 +34,9 @@ public class DeployDeployer extends DeployerSupport {
 
     @Override
     public void processAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
-            throws DeploymentException {
+            throws DeploymentException, IOException {
         localStagingDeployer.processAll(session, deployRequests);
-        Workflows.deploy(context).execute();
+        Workflows.deploy(contextFactory.createContext(session, localStagingDeployer.getLocalStagingDirectory()))
+                .execute();
     }
 }
