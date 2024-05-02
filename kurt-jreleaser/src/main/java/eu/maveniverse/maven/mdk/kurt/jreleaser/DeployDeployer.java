@@ -22,7 +22,7 @@ public class DeployDeployer extends DeployerSupport {
     private final JReleaserContextFactory contextFactory;
 
     public DeployDeployer(LocalStagingDeployer localStagingDeployer, JReleaserContextFactory contextFactory) {
-        super(FullReleaseDeployerFactory.NAME);
+        super(DeployDeployerFactory.NAME);
         this.localStagingDeployer = requireNonNull(localStagingDeployer);
         this.contextFactory = requireNonNull(contextFactory);
     }
