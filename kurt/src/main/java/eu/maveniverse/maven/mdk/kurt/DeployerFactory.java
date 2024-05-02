@@ -16,20 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.plugins.deploy.spi;
+package eu.maveniverse.maven.mdk.kurt;
 
-import java.io.IOException;
-import org.eclipse.aether.RepositorySystemSession;
-import org.eclipse.aether.deployment.DeployRequest;
-import org.eclipse.aether.deployment.DeploymentException;
+import org.apache.maven.execution.MavenSession;
 
 /**
- * Deployer SPI
+ * Deployer factory component.
  */
-public interface DeployerSPI {
+public interface DeployerFactory {
     /**
-     * Receives the request from Maven Deploy Plugin. If returns {@code true} the request was processed.
+     * Creates deployer instance.
      */
-    boolean deploy(RepositorySystemSession session, DeployRequest deployRequest)
-            throws DeploymentException, IOException;
+    Deployer createDeployer(MavenSession session);
 }

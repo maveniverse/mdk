@@ -20,7 +20,7 @@ package org.apache.maven.plugins.deploy;
 
 import javax.inject.Inject;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.maven.execution.MavenSession;
@@ -31,6 +31,7 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.deploy.spi.DeployerSPI;
 import org.apache.maven.rtinfo.RuntimeInformation;
+import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.deployment.DeployRequest;
 import org.eclipse.aether.deployment.DeploymentException;
 import org.eclipse.aether.repository.RemoteRepository;
@@ -129,11 +130,21 @@ public abstract class AbstractDeployMojo extends AbstractMojo {
 
     protected void deploy(DeployRequest deployRequest) throws MojoExecutionException {
         try {
-            DeployerSPI deployer = deployers.iterator().next();
-            HashMap<String, Object> parameters = new HashMap<>();
-            parameters.put("retryFailedDeploymentCount", retryFailedDeploymentCount);
-            deployer.deploy(session.getRepositorySession(), deployRequest, parameters);
-        } catch (DeploymentException e) {
+            RepositorySystemSession repositorySystemSession = session.getRepositorySession();
+            repositorySystemSession
+                    .getData()
+                    .set(FallbackDeployerSPI.RETRY_FAILED_DEPLOYMENT_COUNT, retryFailedDeploymentCount);
+            boolean accepted = false;
+            for (DeployerSPI deployerSPI : deployers) {
+                accepted = deployerSPI.deploy(session.getRepositorySession(), deployRequest);
+                if (accepted) {
+                    break;
+                }
+            }
+            if (!accepted) {
+                throw new MojoExecutionException("No deployer SPI accepted the deploy: failed to deploy");
+            }
+        } catch (DeploymentException | IOException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
     }

@@ -22,26 +22,30 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import java.util.Map;
-
 import org.apache.maven.plugins.deploy.spi.DeployerSPI;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.deployment.DeployRequest;
 import org.eclipse.aether.deployment.DeploymentException;
+import org.eclipse.sisu.Priority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- * Deployer SPI
+ * Fallback deployer, this is the "original" m-deploy-p code in separate component. This code is always present, and
+ * plugin really can always do what it did before: deploy using Resolver. This deployer always accepts deploy
+ * requests and does whatever this plugin was doing with them before.
  *
  * @since 3.2.0
  */
 @Singleton
 @Named
+@Priority(Integer.MIN_VALUE + 1)
 public class FallbackDeployerSPI implements DeployerSPI {
+    public static final String RETRY_FAILED_DEPLOYMENT_COUNT = "retryFailedDeploymentCount";
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final RepositorySystem repositorySystem;
@@ -52,10 +56,9 @@ public class FallbackDeployerSPI implements DeployerSPI {
     }
 
     @Override
-    public void deploy(RepositorySystemSession session, DeployRequest deployRequest, Map<String, Object> parameters)
-            throws DeploymentException {
+    public boolean deploy(RepositorySystemSession session, DeployRequest deployRequest) throws DeploymentException {
         int retryFailedDeploymentCounter =
-                Math.max(1, Math.min(10, (Integer) parameters.get("retryFailedDeploymentCount")));
+                Math.max(1, Math.min(10, (Integer) session.getData().get(RETRY_FAILED_DEPLOYMENT_COUNT)));
         DeploymentException exception = null;
         for (int count = 0; count < retryFailedDeploymentCounter; count++) {
             try {
@@ -79,5 +82,6 @@ public class FallbackDeployerSPI implements DeployerSPI {
         if (exception != null) {
             throw exception;
         }
+        return true;
     }
 }

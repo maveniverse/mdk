@@ -21,6 +21,10 @@
 
   <name>${project.groupId}:${project.artifactId}</name>
 
+  <properties>
+    <version.jreleaser>1.12.0</version.jreleaser>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>eu.maveniverse.maven.mdk</groupId>
@@ -59,10 +63,38 @@
       <artifactId>maven-core</artifactId>
       <scope>provided</scope>
     </dependency>
+
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-compress</artifactId>
+      <groupId>org.jreleaser</groupId>
+      <artifactId>jreleaser-engine</artifactId>
+      <version>${version.jreleaser}</version>
     </dependency>
+    <dependency>
+      <groupId>org.jreleaser</groupId>
+      <artifactId>jreleaser-config-yaml</artifactId>
+      <version>${version.jreleaser}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jreleaser</groupId>
+      <artifactId>jreleaser-config-toml</artifactId>
+      <version>${version.jreleaser}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jreleaser</groupId>
+      <artifactId>jreleaser-config-json</artifactId>
+      <version>${version.jreleaser}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <version>1.17.2</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.16.1</version>
+    </dependency>
+
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
