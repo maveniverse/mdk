@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.nio.file.Path;
 import java.util.Map;
 import org.apache.maven.execution.MavenSession;
+import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.deployment.DeployRequest;
@@ -42,12 +43,20 @@ public class LocalStagingDeployer extends DeployerSupport {
     @Override
     public void processAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
             throws DeploymentException {
+        DefaultRepositorySystemSession mutedSession =
+                new DefaultRepositorySystemSession(session.getRepositorySession());
+        mutedSession.setTransferListener(null);
+        logger.info(
+                "Locally staging {} artifacts",
+                deployRequests.values().stream()
+                        .mapToLong(r -> r.getArtifacts().size())
+                        .sum());
         for (DeployRequest dr : deployRequests.values()) {
             DeployRequest stagingRequest = new DeployRequest();
             stagingRequest.setRepository(stagingRepository);
             stagingRequest.setArtifacts(dr.getArtifacts());
             stagingRequest.setMetadata(dr.getMetadata());
-            repositorySystem.deploy(session.getRepositorySession(), stagingRequest);
+            repositorySystem.deploy(mutedSession, stagingRequest);
         }
     }
 }

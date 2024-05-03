@@ -38,6 +38,11 @@ public class RemoteStagingDeployer extends DeployerSupport {
     @Override
     public void processAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
             throws DeploymentException {
+        logger.info(
+                "Remote staging {} artifacts",
+                deployRequests.values().stream()
+                        .mapToLong(r -> r.getArtifacts().size())
+                        .sum());
         for (DeployRequest dr : deployRequests.values()) {
             DeployRequest stagingRequest = new DeployRequest();
             stagingRequest.setRepository(stagingRepository);
