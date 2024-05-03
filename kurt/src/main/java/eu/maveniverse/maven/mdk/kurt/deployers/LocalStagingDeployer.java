@@ -2,7 +2,6 @@ package eu.maveniverse.maven.mdk.kurt.deployers;
 
 import static java.util.Objects.requireNonNull;
 
-import eu.maveniverse.maven.mdk.kurt.KurtConfig;
 import java.nio.file.Path;
 import java.util.Map;
 import org.apache.maven.execution.MavenSession;
@@ -17,16 +16,19 @@ import org.eclipse.aether.repository.RemoteRepository;
  */
 public class LocalStagingDeployer extends DeployerSupport {
     private final RepositorySystem repositorySystem;
-    private final Path localStagingDirectory;
+    private final RemoteRepository stagingRepository;
+    private final Path stagingDirectory;
 
-    public LocalStagingDeployer(RepositorySystem repositorySystem, Path localStagingDirectory) {
+    public LocalStagingDeployer(
+            RepositorySystem repositorySystem, RemoteRepository stagingRepository, Path stagingDirectory) {
         super(LocalStagingDeployerFactory.NAME);
         this.repositorySystem = requireNonNull(repositorySystem);
-        this.localStagingDirectory = requireNonNull(localStagingDirectory);
+        this.stagingRepository = requireNonNull(stagingRepository);
+        this.stagingDirectory = requireNonNull(stagingDirectory);
     }
 
-    public Path getLocalStagingDirectory() {
-        return localStagingDirectory;
+    public Path getStagingDirectory() {
+        return stagingDirectory;
     }
 
     @Override
@@ -40,14 +42,6 @@ public class LocalStagingDeployer extends DeployerSupport {
     @Override
     public void processAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
             throws DeploymentException {
-        RemoteRepository stagingRepository = repositorySystem.newDeploymentRepository(
-                session.getRepositorySession(),
-                new RemoteRepository.Builder(
-                                KurtConfig.LOCAL_STAGING_ID.require(session),
-                                "default",
-                                localStagingDirectory.toFile().toURI().toASCIIString())
-                        .build());
-
         for (DeployRequest dr : deployRequests.values()) {
             DeployRequest stagingRequest = new DeployRequest();
             stagingRequest.setRepository(stagingRepository);

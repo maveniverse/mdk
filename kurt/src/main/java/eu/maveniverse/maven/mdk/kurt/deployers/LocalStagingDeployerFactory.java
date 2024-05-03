@@ -11,6 +11,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import org.apache.maven.execution.MavenSession;
 import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.repository.RemoteRepository;
 
 @Singleton
 @Named(LocalStagingDeployerFactory.NAME)
@@ -27,7 +28,14 @@ public class LocalStagingDeployerFactory implements DeployerFactory {
     @Override
     public LocalStagingDeployer createDeployer(MavenSession session) {
         Path target = Paths.get(session.getTopLevelProject().getBuild().getDirectory());
-        Path staging = target.resolve(KurtConfig.LOCAL_STAGING_DIRECTORY.require(session));
-        return new LocalStagingDeployer(repositorySystem, staging);
+        Path stagingDirectory = target.resolve(KurtConfig.LOCAL_STAGING_DIRECTORY.require(session));
+        RemoteRepository stagingRepository = repositorySystem.newDeploymentRepository(
+                session.getRepositorySession(),
+                new RemoteRepository.Builder(
+                                KurtConfig.LOCAL_STAGING_ID.require(session),
+                                "default",
+                                stagingDirectory.toFile().toURI().toASCIIString())
+                        .build());
+        return new LocalStagingDeployer(repositorySystem, stagingRepository, stagingDirectory);
     }
 }

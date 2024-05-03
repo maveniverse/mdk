@@ -36,7 +36,7 @@ public class FullReleaseDeployer extends DeployerSupport {
     public void processAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
             throws DeploymentException, IOException {
         localStagingDeployer.processAll(session, deployRequests);
-        Workflows.fullRelease(contextFactory.createContext(session, localStagingDeployer.getLocalStagingDirectory()))
+        Workflows.fullRelease(contextFactory.createContext(session, localStagingDeployer.getStagingDirectory()))
                 .execute();
     }
 }

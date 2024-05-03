@@ -36,7 +36,7 @@ public class DeployDeployer extends DeployerSupport {
     public void processAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
             throws DeploymentException, IOException {
         localStagingDeployer.processAll(session, deployRequests);
-        Workflows.deploy(contextFactory.createContext(session, localStagingDeployer.getLocalStagingDirectory()))
+        Workflows.deploy(contextFactory.createContext(session, localStagingDeployer.getStagingDirectory()))
                 .execute();
     }
 }
