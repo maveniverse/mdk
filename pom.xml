@@ -34,8 +34,8 @@
   </licenses>
 
   <modules>
-    <module>api</module>
-    <module>plugin</module>
+    <module>maven-deploy-plugin-spi</module>
+    <module>maven-deploy-plugin</module>
     <module>kurt</module>
     <module>kurt-jreleaser</module>
   </modules>
@@ -80,7 +80,7 @@
       <!-- Internal -->
       <dependency>
         <groupId>eu.maveniverse.maven.mdk</groupId>
-        <artifactId>api</artifactId>
+        <artifactId>maven-deploy-plugin-spi</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

@@ -7,7 +7,7 @@
     </exportedPackages>
 
     <exportedArtifacts>
-        <exportedArtifact>eu.maveniverse.maven.mdk:api</exportedArtifact>
+        <exportedArtifact>eu.maveniverse.maven.mdk:maven-deploy-plugin-spi</exportedArtifact>
         <exportedArtifact>eu.maveniverse.maven.mdk:kurt</exportedArtifact>
         <exportedArtifact>eu.maveniverse.maven.mdk:kurt-releaser</exportedArtifact>
     </exportedArtifacts>

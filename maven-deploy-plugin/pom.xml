@@ -94,7 +94,7 @@ under the License.
   <dependencies>
     <dependency>
       <groupId>eu.maveniverse.maven.mdk</groupId>
-      <artifactId>api</artifactId>
+      <artifactId>maven-deploy-plugin-spi</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>

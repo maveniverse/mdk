@@ -28,7 +28,7 @@
   <dependencies>
     <dependency>
       <groupId>eu.maveniverse.maven.mdk</groupId>
-      <artifactId>api</artifactId>
+      <artifactId>maven-deploy-plugin-spi</artifactId>
     </dependency>
     <dependency>
       <groupId>eu.maveniverse.maven.mdk</groupId>

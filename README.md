@@ -19,8 +19,8 @@ The crux MDK tries to implement is following:
 # What MDK does?
 
 This experiment contains 3 modules:
-* `plugin` is 1:1 copy of [maven-deploy-plugin](https://github.com/apache/maven-deploy-plugin) with all of it ITs
-* `api` (TBD rename to `spi`) is a small artifact that defines SPI for plugin
+* `maven-deploy-plugin-spi` is a small artifact that defines SPI used by maven-deploy-plugin
+* `maven-deploy-plugin` is 1:1 copy of [maven-deploy-plugin](https://github.com/apache/maven-deploy-plugin) with all of it ITs
 * `kurt` is SPI implementation and Maven extension in one
 * `kurt-jreleaser` is Kurt extension and [JReleaser](https://jreleaser.org/) integration
 
@@ -28,16 +28,16 @@ The goal is ability to "take over" behaviour of `maven-deploy-plugin` with small
 
 # How MDK achieves this?
 
-MDK implemented following changes: The `maven-deploy-plugin` is modified, to depend on `api`, and search for 
+MDK implemented following changes: The `maven-deploy-plugin` is modified, to depend on `maven-deploy-plugin-spi`, and search for 
 components implementing it. If it finds one (and always will), it simply passes the deployment request to it. The 
 reason why "always will" is that plugins own (existing code) was refactored/moved out into one "fallback" component, 
 and it resides within the plugin itself.
 
-When the plugin executes, this happens: Maven resolves `maven-deploy-plugin` and hence its own `api` dependency will
-be resolved as well and added to plugin classpath.
+When the plugin executes, this happens: Maven resolves `maven-deploy-plugin` and hence its own `maven-deploy-plugin-spi` 
+dependency will  be resolved as well and added to plugin classpath.
 
 ```txt
-<m-deploy-p> <--depends-- <api (resolved)>
+<m-deploy-p> <--depends-- <spi (resolved)>
 ```
 
 Essentially, all works as today (very same feature set is preserved).
@@ -64,10 +64,10 @@ And Maven Core activates this extension. Following change happens (see [extensio
 In essence, when MDK Extension is present in Maven, the plugin execution changes like this:
 
 ```txt
-<m-deploy-p> <--depends-- <api (provided from Maven)>
+<m-deploy-p> <--depends-- <spi (provided from Maven)>
 ```
 
-This ensures that there is one `api` in system, hence there are no classloading issues. Next, MDK itself defines
+This ensures that there is one `spi` in system, hence there are no classloading issues. Next, MDK itself defines
 `DeployerSPI` implementation, the `Kurt`, which at this moment "takes over" `maven-deploy-plugin` duties, the plugins
 really becoming "just a messenger".
 
@@ -85,8 +85,9 @@ possible future) services for Artifact publishing.
 
 # JReleaser reuse
 
-Frankly, MDK was inspired by upcoming Sonatype Central publishing changes, but also by the fact that JReleaser already
-provided solutions to all problems. Still, JReleases needs some [hoops and loops](https://jreleaser.org/guide/latest/examples/maven/index.html)
+Frankly, MDK was inspired by upcoming Sonatype Central publishing changes (we already did not support Nx2 staging, but
+now "Central Portal" came in picture as well). Also by the fact that JReleaser already provided solutions to all the
+problems. Still, JReleases needs some [hoops and loops](https://jreleaser.org/guide/latest/examples/maven/index.html)
 to make it work, and these all require non-trivial changes to POMs. The idea is that MDK could handle all this: 
 it can "stage locally", and then just invoke JReleases pointing it locally staged repository, and it that "takes over" 
 from that point. 
