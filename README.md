@@ -103,9 +103,9 @@ cover all the cases. Moreover, as history shows, users are many times baffled wi
 to their POMs to publish their artifacts to this or that remote service.
 
 MDK allows any project to be published by:
-* not doing and POM change
-* still executing only `mvn deploy`
-* makes project and publishing endpoint disconnected, one could even "publish hopping" (a la distro-hopping) without
+* not doing any POM change
+* still executing only `mvn deploy` to deploy
+* makes project build and publishing endpoint disconnected, one could even "publish hopping" (a la distro-hopping) without
   any change to project
 
 # I want to try it out!
