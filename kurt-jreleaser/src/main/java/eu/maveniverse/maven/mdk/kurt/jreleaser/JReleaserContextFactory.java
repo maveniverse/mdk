@@ -1,5 +1,7 @@
 package eu.maveniverse.maven.mdk.kurt.jreleaser;
 
+import static eu.maveniverse.maven.mdk.kurt.KurtConfig.createWithDefault;
+import static eu.maveniverse.maven.mdk.kurt.KurtConfig.createWithoutDefault;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.requireNonNull;
 
@@ -33,20 +35,19 @@ public class JReleaserContextFactory {
     private static final String JRELEASER_PREFIX = "jreleaser.";
 
     public static final KurtConfig JRELEASER_CONFIG_FILE =
-            KurtConfig.create("configFile", ".mvn/jreleaser.yml", JRELEASER_PREFIX + "configFile");
+            createWithDefault(() -> ".mvn/jreleaser.yml", JRELEASER_PREFIX + "configFile");
     public static final KurtConfig JRELEASER_OUTPUT_DIRECTORY =
-            KurtConfig.create("outputDirectory", "jreleaser", JRELEASER_PREFIX + "outputDirectory");
+            createWithDefault(() -> "jreleaser", JRELEASER_PREFIX + "outputDirectory");
     public static final KurtConfig JRELEASER_DRY_RUN =
-            KurtConfig.create("dryRun", Boolean.FALSE.toString(), JRELEASER_PREFIX + "dryRun");
+            createWithDefault(Boolean.FALSE::toString, JRELEASER_PREFIX + "dryRun");
     public static final KurtConfig JRELEASER_GIT_ROOT_SEARCH =
-            KurtConfig.create("gitRootSearch", Boolean.FALSE.toString(), JRELEASER_PREFIX + "gitRootSearch");
+            createWithDefault(Boolean.FALSE::toString, JRELEASER_PREFIX + "gitRootSearch");
     public static final KurtConfig JRELEASER_STRICT =
-            KurtConfig.create("strict", Boolean.FALSE.toString(), JRELEASER_PREFIX + "strict");
-    public static final KurtConfig JRELEASER_APPLY_MAVEN_CENTRAL_RULES = KurtConfig.create(
-            "applyMavenCentralRules", Boolean.FALSE.toString(), JRELEASER_PREFIX + "applyMavenCentralRules");
-    public static final KurtConfig JRELEASER_TARGET = KurtConfig.create("target", null, JRELEASER_PREFIX + "target");
-    public static final KurtConfig JRELEASER_PROFILE_ID =
-            KurtConfig.create("profileId", null, JRELEASER_PREFIX + "profileId");
+            createWithDefault(Boolean.FALSE::toString, JRELEASER_PREFIX + "strict");
+    public static final KurtConfig JRELEASER_APPLY_MAVEN_CENTRAL_RULES =
+            createWithDefault(Boolean.FALSE::toString, JRELEASER_PREFIX + "applyMavenCentralRules");
+    public static final KurtConfig JRELEASER_TARGET = createWithoutDefault(JRELEASER_PREFIX + "target");
+    public static final KurtConfig JRELEASER_PROFILE_ID = createWithoutDefault(JRELEASER_PREFIX + "profileId");
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

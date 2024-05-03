@@ -18,10 +18,9 @@
  */
 package eu.maveniverse.maven.mdk.kurt;
 
-import static java.util.Objects.requireNonNull;
-
 import eu.maveniverse.maven.mdk.kurt.deployers.ResolverDeployerFactory;
 import java.util.Map;
+import java.util.function.Supplier;
 import org.apache.maven.execution.MavenSession;
 import org.eclipse.aether.RepositorySystemSession;
 
@@ -31,25 +30,23 @@ import org.eclipse.aether.RepositorySystemSession;
  * session.
  */
 public final class KurtConfig {
-    private final String name;
-    private final String defaultValue;
+    private final Supplier<String> defaultValueSupplier;
     private final String[] keys;
 
-    public static KurtConfig create(String name, String defaultValue, String... keys) {
-        return new KurtConfig(name, defaultValue, keys);
+    public static KurtConfig createWithoutDefault(String... keys) {
+        return new KurtConfig(null, keys);
     }
 
-    private KurtConfig(String name, String defaultValue, String... keys) {
-        this.name = requireNonNull(name);
-        this.defaultValue = defaultValue; // nullable
+    public static KurtConfig createWithDefault(Supplier<String> defaultValueSupplier, String... keys) {
+        return new KurtConfig(defaultValueSupplier, keys);
+    }
+
+    private KurtConfig(Supplier<String> defaultValueSupplier, String... keys) {
+        this.defaultValueSupplier = defaultValueSupplier; // nullable
         this.keys = keys;
         if (keys.length < 1) {
             throw new IllegalArgumentException("At least one key must be provided");
         }
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getOrDefault(Map<String, Object> map) {
@@ -60,7 +57,11 @@ public final class KurtConfig {
                 return result;
             }
         }
-        return defaultValue;
+        return defaultValueSupplier != null ? defaultValueSupplier.get() : null;
+    }
+
+    public KurtConfig withDefault(Supplier<String> defSupplier) {
+        return new KurtConfig(defSupplier, keys);
     }
 
     public String getOrDefault(RepositorySystemSession session) {
@@ -90,20 +91,19 @@ public final class KurtConfig {
     private static final String KURT_PREFIX = "kurt.";
 
     public static final KurtConfig DEPLOYER =
-            new KurtConfig("deployer", ResolverDeployerFactory.NAME, KURT_PREFIX + "deployer");
+            createWithDefault(() -> ResolverDeployerFactory.NAME, KURT_PREFIX + "deployer");
 
     public static final KurtConfig DEPLOY_AT_END =
-            new KurtConfig("deployAtEnd", Boolean.TRUE.toString(), KURT_PREFIX + "deployAtEnd");
+            createWithDefault(Boolean.TRUE::toString, KURT_PREFIX + "deployAtEnd");
 
     public static final KurtConfig LOCAL_STAGING_ID =
-            new KurtConfig("localStagingId", "staging-deploy", KURT_PREFIX + "localStagingId");
+            createWithDefault(() -> "staging-deploy", KURT_PREFIX + "localStagingId");
 
     public static final KurtConfig LOCAL_STAGING_DIRECTORY =
-            new KurtConfig("localStagingDirectory", "staging-deploy", KURT_PREFIX + "localStagingDirectory");
+            createWithDefault(() -> "staging-deploy", KURT_PREFIX + "localStagingDirectory");
 
     public static final KurtConfig REMOTE_STAGING_ID =
-            new KurtConfig("remoteStagingId", "staging-deploy", KURT_PREFIX + "remoteStagingId");
+            createWithDefault(() -> "staging-deploy", KURT_PREFIX + "remoteStagingId");
 
-    public static final KurtConfig REMOTE_STAGING_URL =
-            new KurtConfig("remoteStagingUrl", null, KURT_PREFIX + "remoteStagingUrl");
+    public static final KurtConfig REMOTE_STAGING_URL = createWithoutDefault(KURT_PREFIX + "remoteStagingUrl");
 }
