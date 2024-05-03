@@ -1,5 +1,8 @@
 # MDK
 
+MDK is universal extension that is able to take over `maven-deploy-plugin` behaviour, wildly change it, and apply all 
+the hoops and loops for you, to save you doing the same. Goal is the least intrusion and the least config.
+
 To derail you learning about MDK, see https://en.wikipedia.org/wiki/MDK
 
 ## What is this about?
