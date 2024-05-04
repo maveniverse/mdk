@@ -39,6 +39,11 @@ public interface Deployer extends Closeable {
      * This method is called whenever Maven Deploy Plugin wants to deploy. Here implementation
      * have chance to inspect request and decide does it "accept" it (returns {@code true}) or
      * "refuses" it (returns {@code false}) but may throw as well to fail whole build.
+     * <p>
+     * Theoretically, implementation could deploy even here, but doing so is discouraged: MDK
+     * follows "best practices" and interleaved deployment (per module) is discouraged, so the "least"
+     * implementation should do is "deploy at end". This is what happens when MDK is present in
+     * system as extension, but nothing more MDK related is configured by user.
      */
     boolean processRequest(MavenSession mavenSession, DeployRequest deployRequest)
             throws DeploymentException, IOException;
