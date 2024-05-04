@@ -1,9 +1,32 @@
 # MDK
 
-MDK is universal extension that is able to take over `maven-deploy-plugin` behaviour, wildly change it, and apply all 
-the hoops and loops for you, to save you doing the same. Goal is the least intrusion and the least config.
+MDK, or "Maven Deployment Kit" is universal extension that is able to take over `maven-deploy-plugin` 
+behaviour, wildly change it, and apply all the hoops and loops for you, to save you doing the same. 
+Goal is the least intrusion and the least config with most flexibility.
 
-To derail you learning about MDK, see https://en.wikipedia.org/wiki/MDK
+MDK goals are defined below:
+
+### MDK does not interfere
+
+MDK does not try to outsmart user, in fact, it leaves user in full control. It means that general
+assumption is that your project fulfills all the required criteria of the targeted deployment service.
+For example, if you aim to deploy to Maven Central, MDK will never "magically" sign artifacts for you,
+create required sources and javadoc artifacts for you. You most probably want to follow "best practices"
+and have a setup (for example a "release" profile) that does all these for you. MDK handles deployment
+requests of artifacts it receives from your build only, it does not "come up" with any missing
+information. In short, MDK does not interfere nor tries to be "super smart". User is the one who 
+is in control.
+
+### MDK does not reinvent anything
+
+MDK relies on Maven (and Resolver), and it does not aim to be ["Iznogoud"](https://en.wikipedia.org/wiki/Iznogoud)
+with his phrase "I want to be Caliph instead of the Caliph". MDK stands aside and merely helps you to 
+achieve your publishing goals to a supported service. Is built on "best and proven practices" that were 
+already present in Maven ecosystem. Artifact creation should happen by your build (and corresponding 
+Maven plugins like `maven-jar-plugin`, `maven-source-plugin` and `maven-javadoc-plugin` are) and same
+stands for signing (using `maven-gpg-plugin` or alike). Checksums are created by [Resolver](https://maven.apache.org/resolver/about-checksums.html), 
+as configured by user. Everything happens as user would expect, there is no alternate universe to 
+configure from the scratch.
 
 ## What is this about?
 
