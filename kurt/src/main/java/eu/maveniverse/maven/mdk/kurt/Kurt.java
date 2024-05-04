@@ -86,22 +86,11 @@ public class Kurt extends AbstractMavenLifecycleParticipant implements DeployerS
     @Override
     public boolean deploy(RepositorySystemSession session, DeployRequest deployRequest)
             throws DeploymentException, IOException {
-        Deployer deployer = getSelectedDeployer(session);
-        Deployer.RequestStatus status = deployer.processRequest(sessionRef.get(), deployRequest);
-        switch (status) {
-            case PROCESSED: {
-                return true;
-            }
-            case DELAYED: {
-                deployAtEndRequests.add(deployRequest);
-                return true;
-            }
-            case REFUSED: {
-                return false;
-            }
-            default:
-                throw new IllegalStateException("Unknown status: " + status);
+        boolean accepted = getSelectedDeployer(session).processRequest(sessionRef.get(), deployRequest);
+        if (accepted) {
+            deployAtEndRequests.add(deployRequest);
         }
+        return accepted;
     }
 
     @Override
@@ -127,7 +116,7 @@ public class Kurt extends AbstractMavenLifecycleParticipant implements DeployerS
                                 deployRequest.getMetadata().forEach(dr::addMetadata);
                             }
                         }
-                        deployer.processAll(session, batched);
+                        deployer.deployAll(session, batched);
                     }
                 }
 

@@ -93,9 +93,6 @@ public final class KurtConfig {
     public static final KurtConfig DEPLOYER =
             createWithDefault(() -> ResolverDeployerFactory.NAME, KURT_PREFIX + "deployer");
 
-    public static final KurtConfig DEPLOY_AT_END =
-            createWithDefault(Boolean.TRUE::toString, KURT_PREFIX + "deployAtEnd");
-
     public static final KurtConfig LOCAL_STAGING_ID =
             createWithDefault(() -> "staging-deploy", KURT_PREFIX + "localStagingId");
 

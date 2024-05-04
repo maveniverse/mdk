@@ -73,6 +73,8 @@
     <version.maven>3.9.6</version.maven>
     <version.resolver>1.9.18</version.resolver>
     <version.slf4j>1.7.36</version.slf4j>
+    <version.mima>2.4.12</version.mima>
+    <version.toolbox>0.1.9</version.toolbox>
   </properties>
 
   <dependencyManagement>
@@ -121,6 +123,25 @@
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-core</artifactId>
         <version>${version.maven}</version>
+      </dependency>
+
+      <!-- MIMA: this is Maven extension, only Maven runtime needed -->
+      <dependency>
+        <groupId>eu.maveniverse.maven.mima</groupId>
+        <artifactId>context</artifactId>
+        <version>${version.mima}</version>
+      </dependency>
+      <dependency>
+        <groupId>eu.maveniverse.maven.mima.runtime</groupId>
+        <artifactId>embedded-maven</artifactId>
+        <version>${version.mima}</version>
+      </dependency>
+
+      <!-- Toolbox -->
+      <dependency>
+        <groupId>eu.maveniverse.maven.toolbox</groupId>
+        <artifactId>shared</artifactId>
+        <version>${version.toolbox}</version>
       </dependency>
 
       <!-- Commons Compress (unpack) -->

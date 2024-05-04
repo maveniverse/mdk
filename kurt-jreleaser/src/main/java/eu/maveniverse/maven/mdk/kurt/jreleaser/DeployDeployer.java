@@ -28,14 +28,14 @@ public class DeployDeployer extends DeployerSupport {
     }
 
     @Override
-    public RequestStatus processRequest(MavenSession mavenSession, DeployRequest deployRequest) {
+    public boolean processRequest(MavenSession mavenSession, DeployRequest deployRequest) {
         return localStagingDeployer.processRequest(mavenSession, deployRequest);
     }
 
     @Override
-    public void processAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
+    public void deployAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
             throws DeploymentException, IOException {
-        localStagingDeployer.processAll(session, deployRequests);
+        localStagingDeployer.deployAll(session, deployRequests);
         Workflows.deploy(contextFactory.createContext(session, localStagingDeployer.getStagingDirectory()))
                 .execute();
     }

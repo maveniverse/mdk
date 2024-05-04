@@ -26,6 +26,18 @@
       <groupId>eu.maveniverse.maven.mdk</groupId>
       <artifactId>maven-deploy-plugin-spi</artifactId>
     </dependency>
+    <dependency>
+      <groupId>eu.maveniverse.maven.mima</groupId>
+      <artifactId>context</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>eu.maveniverse.maven.mima.runtime</groupId>
+      <artifactId>embedded-maven</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>eu.maveniverse.maven.toolbox</groupId>
+      <artifactId>shared</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>javax.inject</groupId>

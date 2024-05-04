@@ -33,15 +33,12 @@ public class LocalStagingDeployer extends DeployerSupport {
     }
 
     @Override
-    public RequestStatus processRequest(MavenSession mavenSession, DeployRequest deployRequest) {
-        if (deployRequest.getArtifacts().stream().anyMatch(Artifact::isSnapshot)) {
-            return RequestStatus.REFUSED;
-        }
-        return RequestStatus.DELAYED;
+    public boolean processRequest(MavenSession mavenSession, DeployRequest deployRequest) {
+        return deployRequest.getArtifacts().stream().noneMatch(Artifact::isSnapshot);
     }
 
     @Override
-    public void processAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
+    public void deployAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
             throws DeploymentException {
         DefaultRepositorySystemSession mutedSession =
                 new DefaultRepositorySystemSession(session.getRepositorySession());

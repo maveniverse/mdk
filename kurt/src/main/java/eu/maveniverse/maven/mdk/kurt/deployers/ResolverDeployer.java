@@ -15,26 +15,19 @@ import org.eclipse.aether.repository.RemoteRepository;
  */
 public class ResolverDeployer extends DeployerSupport {
     private final RepositorySystem repositorySystem;
-    private final boolean deployAtEnd;
 
-    public ResolverDeployer(RepositorySystem repositorySystem, boolean deployAtEnd) {
+    public ResolverDeployer(RepositorySystem repositorySystem) {
         super(ResolverDeployerFactory.NAME);
         this.repositorySystem = requireNonNull(repositorySystem);
-        this.deployAtEnd = deployAtEnd;
     }
 
     @Override
-    public RequestStatus processRequest(MavenSession mavenSession, DeployRequest deployRequest)
-            throws DeploymentException {
-        if (deployAtEnd) {
-            return RequestStatus.DELAYED;
-        }
-        doDeploy(mavenSession.getRepositorySession(), deployRequest);
-        return RequestStatus.PROCESSED;
+    public boolean processRequest(MavenSession mavenSession, DeployRequest deployRequest) throws DeploymentException {
+        return true;
     }
 
     @Override
-    public void processAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
+    public void deployAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
             throws DeploymentException {
         for (DeployRequest dr : deployRequests.values()) {
             doDeploy(session.getRepositorySession(), dr);
