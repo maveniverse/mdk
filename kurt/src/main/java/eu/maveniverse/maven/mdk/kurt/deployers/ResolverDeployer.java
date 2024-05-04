@@ -5,7 +5,6 @@ import static java.util.Objects.requireNonNull;
 import java.util.Map;
 import org.apache.maven.execution.MavenSession;
 import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.deployment.DeployRequest;
 import org.eclipse.aether.deployment.DeploymentException;
 import org.eclipse.aether.repository.RemoteRepository;
@@ -30,11 +29,7 @@ public class ResolverDeployer extends DeployerSupport {
     public void deployAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
             throws DeploymentException {
         for (DeployRequest dr : deployRequests.values()) {
-            doDeploy(session.getRepositorySession(), dr);
+            repositorySystem.deploy(session.getRepositorySession(), dr);
         }
-    }
-
-    private void doDeploy(RepositorySystemSession session, DeployRequest deployRequest) throws DeploymentException {
-        repositorySystem.deploy(session, deployRequest);
     }
 }
