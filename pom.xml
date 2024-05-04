@@ -72,7 +72,7 @@
     <!-- Dependency versions -->
     <version.maven>3.9.6</version.maven>
     <version.resolver>1.9.18</version.resolver>
-    <version.slf4j>1.7.36</version.slf4j>
+    <version.slf4j>2.0.13</version.slf4j>
     <version.mima>2.4.12</version.mima>
     <version.toolbox>0.1.9</version.toolbox>
   </properties>
