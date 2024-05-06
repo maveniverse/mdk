@@ -33,9 +33,9 @@ configure from the scratch.
 Out of the box Maven always provided "interleaved deploy" (that happens each time per module built). Later
 with introduction of parallel builds, but also the realization that this kind of deploy leaves "partial deploys"
 in case of some module failure (for example UT), showed that "deploy at end" is actually the best practice:
-deploy ONLY you are sure you have all to deploy prepared. Some extensions like Takari Lifecycle did
-implement this feature, and later even `maven-deploy-plugin` did. But latter is still able to deploy only
-"at moment last module executing `maven-deploy-plugin` runs", which is technically not "the end" of the
+deploy only when you are sure, that you have everything successfully prepared. Some extensions, like Takari Lifecycle did
+implement this feature, and later even `maven-deploy-plugin` got it. But latter is still able to deploy only
+"at moment last module using `maven-deploy-plugin` runs", which is technically still not "the end" of the
 build.
 
 ## What is this about?
