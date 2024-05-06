@@ -131,9 +131,11 @@ MDK was inspired by upcoming Sonatype Central publishing changes (we already did
 now "Central Portal" came in picture as well that wildly changes things. Nx2 still supported use of 
 `maven-deploy-plugin` but portal does not). The fact that JReleaser provided some solutions to the publishing
 problem, it became "good candidate" to integrate into MDK as a "showcase" of what becomes possible with MDK. 
-Still, use of JReleases alone needs some [hoops and loops](https://jreleaser.org/guide/latest/examples/maven/index.html)
+Still, use of JReleaser alone needs some [hoops and loops](https://jreleaser.org/guide/latest/examples/maven/index.html)
 to make it work, and these all require non-trivial changes to POMs. The idea was to showcase that MDK can handle all this: 
 it can "stage locally", and then just invoke JReleaser and let it "take over" from that point. 
+
+One big point is that MDK (by default) configures JReleaser for you, you just invoke Maven "as usual".
 
 # Summary
 
