@@ -54,6 +54,8 @@ The goal is ability to "take over" behaviour of `maven-deploy-plugin` with small
 
 # How MDK achieves this?
 
+MDK applies pattern described here: https://cwiki.apache.org/confluence/display/MAVEN/Maven+Plugin+SPI
+
 MDK implemented following changes: The `maven-deploy-plugin` is changed, to use `maven-deploy-plugin-spi`, and search for 
 components implementing it. If it finds one (and always will), it simply passes the deployment request to it. The 
 reason why "always will" is that plugins own (existing code) was refactored/moved out into one "fallback" component, 
