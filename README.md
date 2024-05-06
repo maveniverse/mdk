@@ -28,6 +28,16 @@ stands for signing (using `maven-gpg-plugin` or alike). Checksums are created by
 as configured by user. Everything happens as user would expect, there is no alternate universe to 
 configure from the scratch.
 
+### MDK herds toward "best practices"
+
+Out of the box Maven always provided "interleaved deploy" (that happens each time per module built). Later
+with introduction of parallel builds, but also the realization that this kind of deploy leaves "partial deploys"
+in case of some module failure (for example UT), showed that "deploy at end" is actually the best practice:
+deploy ONLY you are sure you have all to deploy prepared. Some extensions like Takari Lifecycle did
+implement this feature, and later even `maven-deploy-plugin` did. But latter is still able to deploy only
+"at moment last module executing `maven-deploy-plugin` runs", which is technically not "the end" of the
+build.
+
 ## What is this about?
 
 Maven has well groomed ecosystem of core and non-core plugins, but since long time it was a pain point when deployment
