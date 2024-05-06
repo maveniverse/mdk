@@ -156,7 +156,7 @@ Is simple:
 * replace `maven-deploy-plugin` version from version you use to `3.1.3-mdk-SNAPSHOT` (like in parent POM, pluginMgmt)
 * install extension like this and configure it https://gist.github.com/cstamas/19fe81319139f04cee3ea3b63090b7da
   (note: `jreleaser.target` can be one of these `sonatype-oss`, `sonatype-s01`, use for whichever service you have credentials)
-* execute the project like this (make sure is release version, and you have all signatures/javadoc/sources in place, enforcer is needed only if you enforce non-snapshot plugins): `JRELEASER_NEXUS2_USERNAME=***** JRELEASER_NEXUS2_PASSWORD=***** mvn clean deploy -P my-release -Denforcer.skip`
+* execute the project like this (make sure is release version, and you have all signatures/javadoc/sources in place, enforcer is needed only if you enforce non-snapshot plugins): `JRELEASER_NEXUS2_USERNAME=***** JRELEASER_NEXUS2_PASSWORD=***** mvn clean deploy -P my-release -Denforcer.skip` (enforcer skip is needed if your project enforces non-SNAPSHOT plugins)
 
 # Example run
 
