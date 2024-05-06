@@ -41,7 +41,7 @@ import static java.util.Objects.requireNonNull;
  * @since 3.2.0
  */
 @Singleton
-@Named
+@Named("fallback")
 @Priority(Integer.MIN_VALUE + 1)
 public class FallbackDeployerSPI implements DeployerSPI {
     public static final String RETRY_FAILED_DEPLOYMENT_COUNT = "retryFailedDeploymentCount";

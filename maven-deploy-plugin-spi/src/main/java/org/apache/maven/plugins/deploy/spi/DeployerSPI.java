@@ -24,11 +24,14 @@ import org.eclipse.aether.deployment.DeployRequest;
 import org.eclipse.aether.deployment.DeploymentException;
 
 /**
- * Deployer SPI
+ * Maven Deploy Plugin SPI.
  */
 public interface DeployerSPI {
     /**
-     * Receives the request from Maven Deploy Plugin. If returns {@code true} the request was processed.
+     * Receives the request from Maven Deploy Plugin. Implementation may return {@code true} if the request was
+     * processed, or {@code false} if the request was denied. The {@code maven-deploy-plugin} performs a loop
+     * over SPI components until one of them processes the request. If no SPI component processed current request,
+     * the Mojo will fail.
      */
     boolean deploy(RepositorySystemSession session, DeployRequest deployRequest)
             throws DeploymentException, IOException;
