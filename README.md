@@ -164,7 +164,8 @@ I took this project https://github.com/maveniverse/mima that is already publishe
 * locally "tricked" it to be release (`mvn versions:set` to some release version)
 * applied changes (this project uses Sonatype S01) https://gist.github.com/cstamas/19fe81319139f04cee3ea3b63090b7da
 * in parent POM changed `maven-deploy-plugin` version to `3.1.3-mdk-SNAPSHOT` (hence enforcer skip is needed as plugin is SNAPSHOT)
-* invoked Maven as https://gist.github.com/cstamas/3da9cee33f6ef2143d786dc78b414bd0 is pretty much "boringly same" Maven build, but at the end things becomes tricky
+* A successful staging example: invoked Maven as https://gist.github.com/cstamas/3da9cee33f6ef2143d786dc78b414bd0 is pretty much "boringly same" Maven build, but at the end things becomes tricky
+* A failed staging example (did not invoke release profile, so signature, sources, etc missing): https://gist.github.com/cstamas/52b6f8091ac554a173d1973460c2206e
 
 # FAQ
 
