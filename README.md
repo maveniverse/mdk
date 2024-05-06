@@ -153,3 +153,7 @@ I took this project https://github.com/maveniverse/mima that is already publishe
 * applied changes (this project uses Sonatype S01) https://gist.github.com/cstamas/19fe81319139f04cee3ea3b63090b7da
 * in parent POM changed `maven-deploy-plugin` version to `3.1.3-mdk-SNAPSHOT` (hence enforcer skip is needed as plugin is SNAPSHOT)
 * invoked Maven as https://gist.github.com/cstamas/322c11599a03d04f6eebfb7d036343ae
+
+# FAQ
+
+* Why `Kurt`? It comes from [MDK](https://maxdockurtmdk.fandom.com/wiki/Kurt_Hectic)
