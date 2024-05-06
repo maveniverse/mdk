@@ -36,6 +36,8 @@ public class DeployDeployer extends DeployerSupport {
     public void deployAll(MavenSession session, Map<RemoteRepository, DeployRequest> deployRequests)
             throws DeploymentException, IOException {
         localStagingDeployer.deployAll(session, deployRequests);
+        logger.info("Configuring and invoking JReleaser...");
+        logger.info("======================================");
         Workflows.deploy(contextFactory.createContext(session, localStagingDeployer.getStagingDirectory()))
                 .execute();
     }
