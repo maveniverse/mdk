@@ -111,18 +111,15 @@ Kurt-JReleaser extension adds more:
 In short, idea is to be the least intrusive and future-proof, while have access to always changing current (and 
 possible future) services for Artifact publishing.
 
-# JReleaser reuse
+# JReleaser integration example
 
-Frankly, MDK was inspired by upcoming Sonatype Central publishing changes (we already did not support Nx2 staging, but
-now "Central Portal" came in picture as well). Also by the fact that JReleaser already provided solutions to all the
-problems. Still, JReleases needs some [hoops and loops](https://jreleaser.org/guide/latest/examples/maven/index.html)
-to make it work, and these all require non-trivial changes to POMs. The idea is that MDK could handle all this: 
-it can "stage locally", and then just invoke JReleases pointing it locally staged repository, and it that "takes over" 
-from that point. 
-
-Another good improvement would be to use JReleaser "-sdk" solutions for use cases like:
-* Enhance "remote-staging" to create a new staging repository, or point build at existing (already created) staging repository,
-  basically making possible staging together artifacts coming from different builds (like different OSes)
+MDK was inspired by upcoming Sonatype Central publishing changes (we already did not support Nx2 staging, but
+now "Central Portal" came in picture as well that wildly changes things. Nx2 still supported use of 
+`maven-deploy-plugin` but portal does not). The fact that JReleaser provided some solutions to the publishing
+problem, it became "good candidate" to integrate into MDK as a "showcase" of what becomes possible with MDK. 
+Still, use of JReleases alone needs some [hoops and loops](https://jreleaser.org/guide/latest/examples/maven/index.html)
+to make it work, and these all require non-trivial changes to POMs. The idea was to showcase that MDK can handle all this: 
+it can "stage locally", and then just invoke JReleaser and let it "take over" from that point. 
 
 # Summary
 
