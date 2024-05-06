@@ -111,6 +111,10 @@ Kurt-JReleaser extension adds more:
 In short, idea is to be the least intrusive and future-proof, while have access to always changing current (and 
 possible future) services for Artifact publishing.
 
+By default, when MDK is installed, but NOTHING of it is configured, user ends up with plain "deploy at end" behaviour.
+MDK tries to provide sensible defaults, but also enforce "best practices", as interleaved deploy should
+be really abandoned in favor or more correct "deploy at end".
+
 # JReleaser integration example
 
 MDK was inspired by upcoming Sonatype Central publishing changes (we already did not support Nx2 staging, but
