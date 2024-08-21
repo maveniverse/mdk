@@ -14,7 +14,7 @@
   <parent>
     <groupId>eu.maveniverse.maven.parent</groupId>
     <artifactId>parent</artifactId>
-    <version>15</version>
+    <version>17</version>
   </parent>
 
   <groupId>eu.maveniverse.maven.mdk</groupId>
@@ -70,11 +70,11 @@
     <requireBuildtimeJavaVersion.version>[11.0.2,)</requireBuildtimeJavaVersion.version>
 
     <!-- Dependency versions -->
-    <version.maven>3.9.8</version.maven>
-    <version.resolver>1.9.20</version.resolver>
+    <version.maven>3.9.9</version.maven>
+    <version.resolver>1.9.22</version.resolver>
     <version.slf4j>1.7.36</version.slf4j>
-    <version.mima>2.4.15</version.mima>
-    <version.toolbox>0.1.30</version.toolbox>
+    <version.mima>2.4.16</version.mima>
+    <version.toolbox>0.2.0</version.toolbox>
   </properties>
 
   <dependencyManagement>
@@ -163,20 +163,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <repositories>
-    <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <id>apache.snapshots.https</id>
-      <name>ASF Snapshots</name>
-      <url>https://repository.apache.org/content/repositories/snapshots/</url>
-    </repository>
-  </repositories>
 
   <build>
     <plugins>
