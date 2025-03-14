@@ -45,7 +45,10 @@ public class FullReleaseDeployer extends DeployerSupport {
         localStagingDeployer.deployAll(session, deployRequests);
         logger.info("Configuring and invoking JReleaser...");
         logger.info("======================================");
-        Workflows.fullRelease(contextFactory.createContext(session, localStagingDeployer.getStagingDirectory()))
+        Workflows.fullRelease(contextFactory.createContext(
+                        session,
+                        localStagingDeployer.getStagingDirectory(),
+                        org.jreleaser.model.api.JReleaserCommand.FULL_RELEASE))
                 .execute();
     }
 }

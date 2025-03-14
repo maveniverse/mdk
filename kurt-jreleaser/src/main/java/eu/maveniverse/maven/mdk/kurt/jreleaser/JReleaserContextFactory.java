@@ -58,7 +58,9 @@ public class JReleaserContextFactory {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public JReleaserContext createContext(MavenSession session, Path stagingDirectory) throws IOException {
+    public JReleaserContext createContext(
+            MavenSession session, Path stagingDirectory, org.jreleaser.model.api.JReleaserCommand jreleaserCommand)
+            throws IOException {
         String target = JRELEASER_TARGET.require(session);
 
         String service;
@@ -150,6 +152,7 @@ public class JReleaserContextFactory {
                 getLogger(outputDirectory),
                 JReleaserContext.Configurer.MAVEN,
                 org.jreleaser.model.api.JReleaserContext.Mode.FULL,
+                jreleaserCommand,
                 model,
                 session.getTopLevelProject().getBasedir().toPath(),
                 outputDirectory,
