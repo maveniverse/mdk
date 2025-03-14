@@ -22,7 +22,7 @@
   <name>${project.groupId}:${project.artifactId}</name>
 
   <properties>
-    <version.jreleaser>1.13.1</version.jreleaser>
+    <version.jreleaser>1.17.0</version.jreleaser>
   </properties>
 
   <dependencies>
@@ -91,12 +91,12 @@
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
-      <version>1.17.2</version>
+      <version>1.19.1</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.16.1</version>
+      <version>2.18.0</version>
     </dependency>
 
     <dependency>

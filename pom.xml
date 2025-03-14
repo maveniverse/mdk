@@ -73,8 +73,8 @@
     <version.maven>3.9.9</version.maven>
     <version.resolver>1.9.22</version.resolver>
     <version.slf4j>1.7.36</version.slf4j>
-    <version.mima>2.4.16</version.mima>
-    <version.toolbox>0.2.0</version.toolbox>
+    <version.mima>2.4.22</version.mima>
+    <version.toolbox>0.6.4</version.toolbox>
   </properties>
 
   <dependencyManagement>
@@ -159,7 +159,7 @@
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
-        <version>5.10.3</version>
+        <version>5.12.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
