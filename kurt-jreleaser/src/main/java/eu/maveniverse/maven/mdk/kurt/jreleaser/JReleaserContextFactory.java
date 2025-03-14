@@ -150,6 +150,7 @@ public class JReleaserContextFactory {
                 getLogger(outputDirectory),
                 JReleaserContext.Configurer.MAVEN,
                 org.jreleaser.model.api.JReleaserContext.Mode.FULL,
+                org.jreleaser.model.api.JReleaserCommand.PUBLISH,
                 model,
                 session.getTopLevelProject().getBasedir().toPath(),
                 outputDirectory,
