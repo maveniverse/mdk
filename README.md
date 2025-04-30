@@ -1,3 +1,7 @@
+# Archived
+
+Superseded by https://github.com/maveniverse/njord
+
 # MDK
 
 MDK, or "Maven Deployment Kit" is universal extension that is able to take over `maven-deploy-plugin` 
